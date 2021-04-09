@@ -1,0 +1,14 @@
+--------client-------
+
+react-router-dom
+react-redux
+jwt-decode
+react-google-login
+@material-ui/icons
+@material-ui/core
+axios
+-------server-------
+
+dotenv
+bcryptjs
+jsonwebtoken

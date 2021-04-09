@@ -1,15 +1,21 @@
 import React from 'react';
-import { Container, AppBar, Typography, Grow , Grid} from '@material-ui/core';
-import tasksimage from './images/tasks.jpg';
-const App = () => {
-    return(
+import { Container } from '@material-ui/core';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-        <Container maxidth="lg">
-            <AppBar position="static" color="inherit">
-                <Typography variant="h2" align="center">Tasks</Typography>
-                <img src={tasksimage} alt="tasks" height="60"/>
-            </AppBar>
-        </Container>
-    );
-}
+import Home from './components/Home/home';
+// import Navbar from './components/Navbar/Navbar';
+import Auth from './components/Auth/auth';
+
+const App = () => (
+  <BrowserRouter>
+    <Container maxWidth="lg">
+      {/* <Navbar /> */}
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/auth" exact component={Auth} />
+      </Switch>
+    </Container>
+  </BrowserRouter>
+);
+
 export default App;
