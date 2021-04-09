@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({ baseURL: 'http://localhost:5000' });
+const url = 'http://localhost:5000';
 
 API.interceptors.request.use((request) => {
     if (localStorage.getItem('profile')) {
@@ -16,6 +17,7 @@ API.interceptors.request.use((request) => {
 // export const updatetask  = (id, updatedTask) => axios.patch(`${url}/${id}`, updatedTask);
 // export const deletetask =  (id) => axios.delete(`${url}/${id}`);
 
-
-export const signIn = (formData) => API.post('/user/signin', formData);
-export const signUp = (formData) => API.post('/user/signup', formData);
+export const signIn = (formData) => axios.post(`${url}/user/signin`, formData);
+export const signUp = (formData) => axios.post(`${url}/user/signup`, formData);
+// export const signIn = (formData) => API.post('/user/signin', formData);
+// export const signUp = (formData) => API.post('/user/signup', formData);

@@ -31,7 +31,9 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log("handle Sumbit called : isSignup: "+ isSignup);
+    console.log("form is:"+form);
+    console.log(form);
     if (isSignup) {
       dispatch(signup(form, history));
     } else {

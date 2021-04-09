@@ -6,6 +6,9 @@ import UserModal from "../models/user.js";
 const secret = 'test';
 
 export const signin = async (req, res) => {
+  console.log("signin called in controllers");
+  console.log(req.body);
+  // console.log(req);
   const { email, password } = req.body;
 
   try {
@@ -26,6 +29,10 @@ export const signin = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
+  console.log("signup called in controllers");
+  console.log(req.body);
+  // console.log(req);
+
   const { email, password, firstName, lastName } = req.body;
 
   try {
