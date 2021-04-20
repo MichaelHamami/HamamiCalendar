@@ -30,8 +30,6 @@ export const signin = async (req, res) => {
 
 export const signup = async (req, res) => {
   console.log("signup called in controllers");
-  console.log(req.body);
-  // console.log(req);
 
   const { email, password, firstName, lastName } = req.body;
 

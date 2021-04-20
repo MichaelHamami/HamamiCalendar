@@ -1,8 +1,9 @@
+  
 import { makeStyles } from '@material-ui/core/styles';
 import { deepPurple } from '@material-ui/core/colors';
 
 export default makeStyles((theme) => ({
-  appBar: {
+  mainContainer: {
     borderRadius: 15,
     margin: '30px 0',
     display: 'flex',
@@ -10,6 +11,9 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '10px 50px',
+  },
+  gridcolumns: {
+    gridColumn: 3,
   },
   heading: {
     color: 'rgba(0,183,255, 1)',
@@ -36,12 +40,34 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
+  smMargin: {
+    margin: theme.spacing(1),
+  },
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
   },
-  create: {
-    marginLeft: '15px',
+  [theme.breakpoints.down('sm')]: {
+    appBar: {
+      padding: '10px 20px',
+    },
+    heading: {
+      display: 'none',
+    },
+    userName: {
+      display: 'none',
+    },
+    image: {
+      marginLeft: '5px',
+    },
+    toolbar: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      width: '160px',
+    },
+  },
 
-  }
+  actionDiv: {
+    textAlign: 'center',
+  },
 }));

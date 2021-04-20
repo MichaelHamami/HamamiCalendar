@@ -4,10 +4,8 @@ import * as api from '../api/index.js';
 export const signin = (formData, router) => async (dispatch) => {
   try {
     console.log("signin called on actions");
-    // console.log("signin called on actions: with formdata: "+formData);
     const { data } = await api.signIn(formData);
-    console.log("data: "+data );
-    console.log(data);
+    
     dispatch({ type: AUTH, data });
 
     router.push('/');
@@ -18,12 +16,9 @@ export const signin = (formData, router) => async (dispatch) => {
 
 export const signup = (formData, router) => async (dispatch) => {
   try {
-    // console.log("signin called on actions: with formdata: "+formData);
     console.log("signup called on actions");
 
     const { data } = await api.signUp(formData);
-    console.log("data: "+data );
-    console.log(data);
 
     dispatch({ type: AUTH, data });
 
