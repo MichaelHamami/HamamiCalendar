@@ -1,10 +1,10 @@
-  
-// import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line
 import React, { useState, useEffect } from 'react';
-import { css, jsx } from '@emotion/react'
 import _ from "lodash";
 import moment from "moment";
 import "./calander.css";
+// eslint-disable-next-line
+import { TextField, Button } from '@material-ui/core';
 
 // import { TextField, Button, Typography, Paper, requirePropFactory } from '@material-ui/core';
 // import Task from '../Tasks/Task/task';
@@ -89,25 +89,94 @@ import "./calander.css";
   //   grid-template-columns: requirePropFactory(7,1fr),
   //   gr
   // }
-  //  renderDays() {
-  //   return days.map((x, i) => (
-  //   // return days.map((x, i) => (
-  //     <div
-  //       className="day-name"
-  //       key={"day-of-week-" + i}
-  //       css={[{ borderColor: "LightGray" },
-  //        _.get(this.props.styles, 'day', {})]}
-  //     >
-  //       {x}
-  //     </div>
-  //   ));
-  // }
+   renderDays() {
+    return this.state.days.map((x, i) => (
+    // return days.map((x, i) => (
+      <div className="day-name"
+      key={"day-of-week-" + i}>
+        {x}
+      </div> 
+      ));
+  }
+  
+  renderDates(eventsEachDay) {
+    var days = [...Array(this.state.current.daysInMonth() + 1).keys()].slice(1); // create array from 1 to number of days in month
 
+    var dayOfWeek = this.state.current.day(); //get day of week of first day in the month
+
+    var padDays = (((-this.state.current.daysInMonth() - this.state.current.day()) % 7) + 7) % 7; //number of days to fill out the last row    
+
+    return [
+      [...Array(dayOfWeek)].map((x, i) => (
+        <div
+          className="day"
+          key={"empty-day-" + i}
+          // css={_.get(this.props.styles, 'day', {})}
+        ></div>
+      )),
+      days.map(x => {
+        if (x === this.state.today.date() && this.state.current.isSame(this.state.today, "month")) {
+          return (
+            // The today block
+            <div
+              className="day"
+              key={"day-" + x}
+              // css={[_.get(this.props.styles, 'day', {}), _.get(this.props.styles, 'today', {})]}
+            >
+              <span
+                css={{
+                  paddingRight: '6px',
+                }}
+              >
+                {x}
+              </span>
+              <div className="innerDay" id={"day-" + x}>
+
+                {/* {eventsEachDay[x - 1]} */}
+                </div>
+            </div>
+          );
+        } else {
+          // The not today block
+          return (
+            <div
+              className="day"
+              key={"day-" + x}
+              // css={_.get(this.props.styles, 'day', {})}
+            >
+              <span
+                css={{
+                  paddingRight: '6px',
+                }}
+              >
+                {x}
+              </span>
+              <div className="innerDay" id={"day-" + x}>
+              <Button className="bdelete" variant="contained"    
+              // style={{height: '10px', width : '1px'}}
+              size="small">+</Button>
+
+                {/* {eventsEachDay[x - 1]} */}
+                </div>
+            </div>
+          );
+        }
+      }),
+      [...Array(padDays)].map((x, i) => (
+        <div
+          className="day"
+          key={"empty-day-2-" + i}
+          css={_.get(this.props.styles, 'day', {})}
+        ></div>
+      ))
+    ];
+  }
   render() {
     return (
     // <div>
     //   Calander
     // </div>
+    // calendar
     <div
     className="calendar"
     css={[{
@@ -122,7 +191,8 @@ import "./calander.css";
     },
     // , _.get(this.props.styles, 'calendar', {})
   ]}
-  >
+  >  
+      {/* start header */}
         <div className="calendar-header">
           <div
             className="calendar-navigate"
@@ -142,7 +212,15 @@ import "./calander.css";
              >
             &#10095;
           </div>
+        {/* end of header */}
         </div>
+        {/* start of body */}
+        <div className="calendar-body">
+          {this.renderDays()}
+          {this.renderDates()}
+        {/* end of body */}
+        </div>
+    {/* end of calender */}
     </div>
   );
 }

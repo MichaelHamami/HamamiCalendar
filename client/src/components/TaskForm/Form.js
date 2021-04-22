@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import useStyles from './styles';
+// eslint-disable-next-line
 import { createtask, updateTask, createRepeatedTasks, deleteRepeatedTasks} from '../../actions/tasks';
 import moment from 'moment';
 // import 'react-modern-calendar-datepicker/lib/DatePicker.css';
@@ -70,19 +71,19 @@ const TaskForm = ({ currentId, setCurrentId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("handleSubmit called in Form.js");
-    let user_ID = ''
-    if(!user?.result?._id)
-    {
-      user_ID = user.result.googleId
-    }
-    else{
-      user_ID = user.result._id
-    }
+    // let user_ID = ''
+    // if(!user?.result?._id)
+    // {
+    //   user_ID = user.result.googleId
+    // }
+    // else{
+    //   user_ID = user.result._id
+    // }
     // Create reapeted
 
-    var reapeted = 2;
-    var startDate = new Date(2013, 1, 12);
-    var endDate = new Date(2013, 1, 15);
+    // var reapeted = 2;
+    // var startDate = new Date(2013, 1, 12);
+    // var endDate = new Date(2013, 1, 15);
     let tasks = [];
     // startDateMoment.diff(endDateMoment, 'days')
     let i;
