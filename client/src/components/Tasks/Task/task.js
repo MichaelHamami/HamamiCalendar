@@ -4,6 +4,7 @@ import { Card, CardActions, CardContent, Button, Typography } from '@material-ui
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useDispatch } from 'react-redux';
+// eslint-disable-next-line 
 import moment from 'moment';
 import useStyles from './styles';
 import { deleteTask } from '../../../actions/tasks';
@@ -28,8 +29,11 @@ const Task = ({task, setCurrentId } ) => {
 
         <Typography variant="body2" color="textSecondary" component="p">{task.description}</Typography>
         <Typography variant="body2" color="textSecondary" component="p">{task.startTime}</Typography>
+        {/* <Typography variant="body2" color="textSecondary" component="p">{task.startDate}</Typography> */}
         <Typography variant="body2" color="textSecondary" component="p">{moment(task.startDate).format('DD/MM/YYYY')}</Typography>
         <Typography variant="body2" color="textSecondary" component="p">{task.group}</Typography>
+        <Typography variant="body2" color="textSecondary" component="p">{task.creator}</Typography>
+
 
 
       </CardContent>

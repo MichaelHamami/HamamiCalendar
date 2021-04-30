@@ -4,14 +4,18 @@ const taskSchema = mongoose.Schema({
 
     name: String,
     description: String,
-    creator: String,
+    creator: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: new Date()
     },
     startDate: {
-        type: Date,
-        default: new Date()
+        // type: String
+        type: Date
+        // default: new Date()
     },
     startTime:String,
     group:{

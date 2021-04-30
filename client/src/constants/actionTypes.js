@@ -4,6 +4,8 @@ export const DELETE = 'DELETE';
 export const FETCH_ALL = 'FETCH_ALL';
 export const DELETE_GROUP = 'DELETE_GROUP';
 export const CREATE_GROUP = 'CREATE_GROUP';
+export const PARTIAL_FETCH = 'PARTIAL_FETCH';
+
 
 
 

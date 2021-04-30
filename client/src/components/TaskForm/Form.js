@@ -1,4 +1,3 @@
-  
 // eslint-disable-next-line
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
@@ -87,14 +86,16 @@ const TaskForm = ({ currentId, setCurrentId }) => {
     let tasks = [];
     // startDateMoment.diff(endDateMoment, 'days')
     let i;
-    for (i=0; i<5; i++)
+    for (i=0; i<8; i++)
     {
       let repeated_task = {
-        name: 'number: '+i+" worked?",
+        name: 'number: '+i,
         description: 'desc',
-        startTime: '13:00',
-        startDate: new Date(),
-        group:5
+        startTime: '1'+i+':00',
+        // startDate: "1"+i+"/04/2021",
+        startDate: new Date(2021,4,i),
+        creator: user,
+        group:i
       }
       tasks.push(repeated_task);
     }

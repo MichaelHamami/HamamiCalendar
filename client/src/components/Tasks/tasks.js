@@ -26,7 +26,6 @@ const Tasks = ({setCurrentId }) => {
 
   return (
     !tasks.length ? <CircularProgress /> : (
-      // <Grid container alignItems="stretch" spacing={3}>
        <Grid className={classes.container} container alignItems="stretch" spacing={3}>
         {tasks.map((task) => (
           <Grid key={task._id} item xs={12} sm={6} md={6}>

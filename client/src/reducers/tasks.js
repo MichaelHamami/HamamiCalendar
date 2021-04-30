@@ -1,8 +1,7 @@
-  
-import { FETCH_ALL, CREATE, UPDATE, DELETE, DELETE_GROUP, CREATE_GROUP } from '../constants/actionTypes';
+// eslint-disable-next-line 
+import { FETCH_ALL, CREATE, UPDATE, DELETE, DELETE_GROUP, CREATE_GROUP, PARTIAL_FETCH } from '../constants/actionTypes';
 
 const taskReducer = (tasks = [], action) => {
-  // const taskReducer = (tasks = {taskss:[]}, action) => {
 
   switch (action.type) {
     case FETCH_ALL:
@@ -22,6 +21,9 @@ const taskReducer = (tasks = [], action) => {
     case CREATE_GROUP:
       console.log("we get to create group action inside reducers");
       return [...tasks, ...action.payload];
+    // case PARTIAL_FETCH:
+    //     console.log("we get to partial fetch action inside reducers");
+    //   return [...action.payload];
     default:
       console.log("Default of reducers");
       return tasks;

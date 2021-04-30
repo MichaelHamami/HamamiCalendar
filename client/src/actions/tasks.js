@@ -68,3 +68,74 @@ export const createRepeatedTasks = (tasks) => async (dispatch) => {
     console.log(error);
   }
 }
+export const getTasksByDayOfUser = (startDate) => async (dispatch) => {
+  console.log("getTasksByDay called in actions");
+
+  try {
+    const { data } = await api.getTasksByDayOfUser(startDate);
+
+    dispatch({ type: FETCH_ALL, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getTasksByDayAndHourOfUser = (startDate,startTime) => async (dispatch) => {
+  console.log("getTasksByDayAndHour called in actions");
+
+  try {
+    const { data } = await api.getTasksByDayAndHourOfUser(startDate,startTime);
+
+    dispatch({ type: FETCH_ALL, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getWeekTasksOfUser = (startDate) => async (dispatch) => {
+  console.log("getWeekTasks called in actions with date: "+startDate);
+
+  try {
+    const { data } = await api.getWeekTasksOfUser(startDate);
+
+    dispatch({ type: FETCH_ALL, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const getTasksByDay = (startDate) => async (dispatch) => {
+  console.log("getTasksByDay called in actions");
+
+  try {
+    const { data } = await api.getTasksByDay(startDate);
+
+    dispatch({ type: FETCH_ALL, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const getTasksByDayAndHour = (startDate,startTime) => async (dispatch) => {
+  console.log("getTasksByDayAndHour called in actions");
+
+  try {
+    const { data } = await api.getTasksByDayAndHour(startDate,startTime);
+
+    dispatch({ type: FETCH_ALL, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getWeekTasks = (startDate) => async (dispatch) => {
+  console.log("getWeekTasks called in actions with date: "+startDate);
+
+  try {
+    const { data } = await api.getWeekTasks(startDate);
+
+    dispatch({ type: FETCH_ALL, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+}
