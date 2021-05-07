@@ -4,9 +4,8 @@ import moment from 'moment';
 
 export const getTasks = async (request,response) => {
     try {
-        // const tasks = await Task.find();
-        const tasks = await Task.find({creator: request.userId});
-
+        const tasks = await Task.find();
+        // const tasks = await Task.find({creator: request.userId});
         // console.log(tasks);
         response.status(200).json(tasks);
     } catch (error)
@@ -23,8 +22,6 @@ export const getTasksOfUser = async (request,response) => {
     }
     try {
         const tasks = await Task.find({creator: request.userId});
-
-        // console.log(tasks);
         response.status(200).json(tasks);
     } catch (error)
     {
@@ -70,11 +67,11 @@ export const updateTask = async (req, res) => {
     console.log("updateTask called in server Controllers");
 
     const { id } = req.params;
-    const { name, description, creator,startDate,group } = req.body;
+    const { name, description, creator,startDate,group, startTime } = req.body;
     
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No task with id: ${id}`);
 
-    const updatedTask = {  name, description, creator,startDate,group, _id: id };
+    const updatedTask = {  name, description, creator, startDate, startTime, group, _id: id };
 
     const theUpdated = await Task.findByIdAndUpdate(id, updatedTask, { new: true });
 

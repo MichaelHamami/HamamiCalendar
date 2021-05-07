@@ -1,15 +1,18 @@
   
+// eslint-disable-next-line
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import {Modal } from 'react-bootstrap';
+// eslint-disable-next-line
 import { useDispatch, useSelector } from 'react-redux';
 // eslint-disable-next-line 
 import moment from 'moment';
 // import Modal from 'react-modal';
 import DatePicker from "react-datepicker";
 import useStyles from './styles';
-import { deleteTask } from '../../../../actions/tasks';
+import { deleteTask, updateTask } from '../../../../actions/tasks';
 import "./customDatePickerWidth.css";
+import "./WeeklyTaskModal.css";
 import DeleteIcon from '@material-ui/icons/Delete';
 
 
@@ -20,16 +23,27 @@ const WeeklyTaskModal = ({task,currentId = 0,show=false, onClose}) => {
 
   const dispatch = useDispatch();
   const classes = useStyles();
+  // eslint-disable-next-line
   const user = JSON.parse(localStorage.getItem('profile'));
   const handleChange = (e) => setTaskData({ ...taskData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("handleSubmit called in Form.js");
+    var user_ID = ''
+    if(!user?.result?._id)
+    {
+      user_ID = user.result.googleId
+    }
+    else{
+      user_ID = user.result._id
+    }
+    dispatch(updateTask(task._id,{ ...taskData, creator:user_ID}));
+    onClose();
   };
 
   console.log("task modal task:");
-  console.log(task);
+  console.log(taskData);
 if(!show) return null
   return (
     <Modal show={show} onHide={onClose}>
@@ -58,11 +72,15 @@ if(!show) return null
      minDate={new Date()}/> 
     </div>
       <br></br>
-      <Button className={classes.buttonSubmit} variant="contained" color="primary" size="lg" type="submit">Save</Button>
-      <Button className={classes.buttonSave} variant="contained" color="secondary" size="lg"
+      <Button className={classes.buttonSubmit} variant="contained" color="primary"  type="submit">Save</Button>
+      <Button className={classes.buttonSave} variant="contained" color="secondary"
       onClick={onClose}>
         Close</Button>
-        <Button className={classes.buttonDelete} size="medium" color="secondary" onClick={() => dispatch(deleteTask(task._id))}>
+        <Button className={classes.buttonDelete} size="medium" color="secondary" onClick={() => 
+          {
+            dispatch(deleteTask(task._id));
+            onClose();
+          }}>
           <DeleteIcon fontSize="large" /> Delete
       </Button>
     </form>

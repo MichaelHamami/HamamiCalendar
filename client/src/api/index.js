@@ -1,8 +1,19 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:5000' });
-const url = 'http://localhost:5000';
-const url_tasks =   'http://localhost:5000/tasks';
+// before deployment
+// const API = axios.create({ baseURL: 'http://localhost:5000' });
+// // eslint-disable-next-line
+// const url = 'http://localhost:5000';
+// const url_tasks =   'http://localhost:5000/tasks';
+
+// Deployment
+// const options = {
+//   headers: {'Access-Control-Allow-Origin': '*'}
+// };
+const API = axios.create({ baseURL: 'https://hamami-calendar.herokuapp.com' });
+// eslint-disable-next-line
+// const url = 'http://localhost:5000';
+const url_tasks =   'https://hamami-calendar.herokuapp.com/tasks';
 
 // For the middleware
 API.interceptors.request.use((request) => {
@@ -18,6 +29,7 @@ API.interceptors.request.use((request) => {
 // export const createTask = (newTask) => axios.post(url_tasks, newTask);
 // export const updateTask  = (id, updatedTask) => axios.patch(`${url_tasks}/${id}`, updatedTask);
 // export const deleteTask =  (id) => axios.delete(`${url_tasks}/${id}`);
+
 export const fetchTasks = () => API.get('/tasks');
 export const createTask = (newTask) => API.post('/tasks',newTask);
 export const updateTask = (id, updatedTask) => API.patch(`/tasks/${id}`, updatedTask);

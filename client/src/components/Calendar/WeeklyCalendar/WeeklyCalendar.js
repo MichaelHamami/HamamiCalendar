@@ -119,7 +119,8 @@ import WeeklyTaskModal from './WeeklyTaskModal/WeeklyTaskModal';
     renderModal()
     {
       console.log("render Modal called");
-                {/* {this.state.modalOpened ? <WeeklyTaskModal toggle={this.togglePop} /> : null} */}
+      // eslint-disable-next-line
+    {/* this.state.modalOpened ? <WeeklyTaskModal toggle={this.togglePop} /> : null */}
       if(this.state.tasks?.length)
       {
         console.log("trying to open modal");

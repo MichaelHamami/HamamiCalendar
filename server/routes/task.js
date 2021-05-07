@@ -7,7 +7,7 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 // Basic CRUD
-// router.get("/", getTasks);
+router.get("/taskscheck", getTasks);
 router.post("/",auth, createTask);
 router.delete('/:id',auth, deleteTask);
 router.patch('/:id',auth, updateTask);

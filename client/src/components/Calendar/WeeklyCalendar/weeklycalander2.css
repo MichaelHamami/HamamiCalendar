@@ -1,0 +1,35 @@
+/* body {
+   background-image: none;
+ } */
+
+.background-none {
+  background-image: none;
+}
+
+ .unselectable {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.calendar-navigate {
+  padding: 10px;
+  opacity: 0.5;
+}
+
+.calendar-navigate:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calendar-title {
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+}

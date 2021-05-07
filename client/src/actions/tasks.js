@@ -28,6 +28,8 @@ export const createtask = (task) => async (dispatch) => {
 export const updateTask = (id, task) => async (dispatch) => {
   console.log("updateTask called in actions");
   try {
+    console.log(task);
+
     const { data } = await api.updateTask(id, task);
 
     dispatch({ type: UPDATE, payload: data });

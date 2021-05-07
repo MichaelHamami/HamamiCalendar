@@ -18,8 +18,7 @@ export default makeStyles((theme) => ({
   buttonSubmit: {
     marginBottom: 10,
   },
-  // datepicker: {
-  //   font-family: "sans-serif",
-  //   text-align: "center",
-  // },
+  datepicker: {
+    margin: theme.spacing(1),
+  },
 }));

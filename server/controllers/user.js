@@ -9,6 +9,7 @@ export const signin = async (req, res) => {
   console.log("signin called in controllers");
   console.log(req.body);
   // console.log(req);
+
   const { email, password } = req.body;
 
   try {
@@ -21,7 +22,10 @@ export const signin = async (req, res) => {
     if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, { expiresIn: "1h" });
-
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    // res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    // res.setHeader('Access-Control-Allow-Credentials', true); // If needed
     res.status(200).json({ result: oldUser, token });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });

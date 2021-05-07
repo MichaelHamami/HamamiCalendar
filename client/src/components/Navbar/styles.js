@@ -43,5 +43,11 @@ export default makeStyles((theme) => ({
   create: {
     marginLeft: '15px',
 
+  },
+  homeBtn:{
+    margin: '10px 20px 0px 20px',
+    '&:hover': {
+      color: 'rgba(0,183,255, 1)',
+    }
   }
 }));

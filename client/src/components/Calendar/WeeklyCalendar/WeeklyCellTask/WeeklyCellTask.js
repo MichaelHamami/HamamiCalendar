@@ -8,10 +8,12 @@ import { useDispatch } from 'react-redux';
 // eslint-disable-next-line 
 // import moment from 'moment';
 import useStyles from './styles';
+import './WeeklyCellTask.css';
 // import { deleteTask } from '../../../actions/tasks';
 
 
 const WeeklyCellTask = ({task, click} ) => {
+  // eslint-disable-next-line
     const dispatch = useDispatch();
     const classes = useStyles();
 
@@ -24,9 +26,11 @@ const WeeklyCellTask = ({task, click} ) => {
                 click();
             }
         }>
-      <Card className={classes.card}>
+      <Card className={`${classes.card} cardcustome-header`}>
           <Typography variant="subtitle2">{task.startTime}</Typography>
           <Typography variant="subtitle2">{task.name}</Typography>
+          <Typography variant="subtitle2">{task.startDate}</Typography>
+
 
         {/* <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">{task.startTime}</Typography>

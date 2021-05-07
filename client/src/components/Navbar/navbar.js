@@ -40,9 +40,13 @@ const Navbar = () => {
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
       <div className={classes.brandContainer}>
-        <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">Calander</Typography>
+        <Typography component={Link} to="/calendar" className={classes.heading} variant="h2" align="center">Calendar</Typography>
+        <div className={classes.homeBtn}>
+          <Button component={Link} to="/" color="primary">Home</Button>
+        </div>
       </div>
       <Toolbar className={classes.toolbar}>
+
         {user?.result ? (
           <div className={classes.profile}>
             <Button component={Link} to="/task" variant="contained"  color="primary">Create Task</Button>
