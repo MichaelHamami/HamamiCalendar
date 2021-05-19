@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { AppBar, Typography, Toolbar, Avatar, Button } from '@material-ui/core';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import decode from 'jwt-decode';
-
-// import memories from '../../images/memories.png';
-import * as actionType from '../../constants/actionTypes';
-import useStyles from './styles';
+import React, { useState, useEffect } from "react";
+import { AppBar, Typography, Toolbar, Avatar, Button } from "@material-ui/core";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import decode from "jwt-decode";
+import * as actionType from "../../constants/actionTypes";
+import useStyles from "./styles";
 
 const Navbar = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
@@ -18,7 +16,7 @@ const Navbar = () => {
   const logout = () => {
     dispatch({ type: actionType.LOGOUT });
 
-    history.push('/auth');
+    history.push("/auth");
 
     setUser(null);
   };
@@ -32,7 +30,7 @@ const Navbar = () => {
       if (decodedToken.exp * 1000 < new Date().getTime()) logout();
     }
 
-    setUser(JSON.parse(localStorage.getItem('profile')));
+    setUser(JSON.parse(localStorage.getItem("profile")));
     // eslint-disable-next-line
   }, [location]);
   // eslint-disable-next-line
@@ -40,23 +38,70 @@ const Navbar = () => {
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
       <div className={classes.brandContainer}>
-        <Typography component={Link} to="/calendar" className={classes.heading} variant="h2" align="center">Calendar</Typography>
-        <div className={classes.homeBtn}>
-          <Button component={Link} to="/" color="primary">Home</Button>
-        </div>
+        <Typography
+          component={Link}
+          to="/calendar"
+          className={classes.heading}
+          variant="h2"
+          align="center"
+        >
+          Calendar
+        </Typography>
+        <Button
+          component={Link}
+          to="/"
+          color="primary"
+          className={classes.homeBtn}
+        >
+          Home
+        </Button>
+        {user?.result ? (
+          <Button
+            component={Link}
+            to="/profile"
+            color="primary"
+            className={classes.homeBtn}
+          >
+            Profile
+          </Button>
+        ) : null}
       </div>
       <Toolbar className={classes.toolbar}>
-
         {user?.result ? (
           <div className={classes.profile}>
-            <Button component={Link} to="/task" variant="contained"  color="primary">Create Task</Button>
-            <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar>
-            <Typography className={classes.userName} variant="h6">{user?.result.name}</Typography>
-            <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
+            <Button
+              className={classes.create_task_button}
+              component={Link}
+              to="/task"
+              variant="contained"
+              color="primary"
+            >
+              Create Task
+            </Button>
+            {/* <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar> */}
+            <Typography className={classes.userName} variant="h6">
+              {user?.result.name}
+            </Typography>
+            <Button
+              variant="contained"
+              className={classes.logout}
+              color="secondary"
+              onClick={logout}
+            >
+              Logout
+            </Button>
           </div>
         ) : (
           <div>
-          <Button component={Link} to="/auth" variant="contained" className={classes.create} color="primary">Sign In</Button>
+            <Button
+              component={Link}
+              to="/auth"
+              variant="contained"
+              className={classes.create}
+              color="primary"
+            >
+              Sign In
+            </Button>
           </div>
         )}
       </Toolbar>

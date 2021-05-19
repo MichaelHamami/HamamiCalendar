@@ -6,8 +6,5 @@ export const DELETE_GROUP = 'DELETE_GROUP';
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const PARTIAL_FETCH = 'PARTIAL_FETCH';
 
-
-
-
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';

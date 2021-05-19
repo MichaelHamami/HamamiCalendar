@@ -1,17 +1,22 @@
-import React from 'react';
-import { Container } from '@material-ui/core';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import React from "react";
+import { Container } from "@material-ui/core";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 // eslint-disable-next-line
-import Home from './components/Home/home';
+import Home from "./components/Home/home";
+import Profile from "./components/Profile/Profile";
+
 // import Calendar from './components/Calendar/Calendar';
 // eslint-disable-next-line
 // import WeeklyCalendar from './components/Calendar/WeeklyCalendar/WeeklyCalendar';
-import WeeklyCalendar2 from './components/Calendar/WeeklyCalendar/WeeklyCalendar2';
+import WeeklyCalendar2 from "./components/Calendar/WeeklyCalendar/WeeklyCalendar2";
 
-
-import TaskForm from './components/TaskForm/Form';
-import Navbar from './components/Navbar/navbar';
-import Auth from './components/Auth/auth';
+import TaskForm from "./components/TaskForm/Form";
+import Navbar from "./components/Navbar/navbar";
+import Auth from "./components/Auth/auth";
+import ChangeEmail from "./components/Profile/ChangeEmail";
+import ChangePassword from "./components/Profile/ChangePassword";
+import setPhone from "./components/Profile/setPhone";
+import ActivateUser from "./components/Auth/activate_user";
 // import Tasks from './components/Tasks/tasks';
 
 const App = () => (
@@ -21,11 +26,16 @@ const App = () => (
       <Switch>
         <Route path="/calendar" exact component={WeeklyCalendar2} />
         {/* <Route path="/" exact component={Calendar} /> */}
+        <Route path="/profile" exact component={Profile} />
         <Route path="/" exact component={Home} />
         {/* <Route path="/" exact component={Tasks} /> */}
         <Route path="/auth" exact component={Auth} />
+        <Route path="/activate" exact component={ActivateUser} />
         <Route path="/task" exact component={TaskForm} />
 
+        <Route path="/changeEmail" exact component={ChangeEmail} />
+        <Route path="/setPhone" exact component={setPhone} />
+        <Route path="/changePassword" exact component={ChangePassword} />
       </Switch>
     </Container>
   </BrowserRouter>

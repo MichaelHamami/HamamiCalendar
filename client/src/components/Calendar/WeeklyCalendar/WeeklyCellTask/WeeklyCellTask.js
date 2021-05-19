@@ -6,7 +6,7 @@ import { Card, CardActions, CardContent, Button, Typography } from '@material-ui
 // import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useDispatch } from 'react-redux';
 // eslint-disable-next-line 
-// import moment from 'moment';
+import moment from 'moment';
 import useStyles from './styles';
 import './WeeklyCellTask.css';
 // import { deleteTask } from '../../../actions/tasks';
@@ -22,14 +22,16 @@ const WeeklyCellTask = ({task, click} ) => {
         <div className="Cell-Task"
         onClick= {e => {
                 e.stopPropagation();
-                console.log( "Card Clicked");
+                // console.log( "Card Clicked");
                 click();
             }
         }>
       <Card className={`${classes.card} cardcustome-header`}>
-          <Typography variant="subtitle2">{task.startTime}</Typography>
           <Typography variant="subtitle2">{task.name}</Typography>
-          <Typography variant="subtitle2">{task.startDate}</Typography>
+          <Typography variant="subtitle2">{task.startTime}</Typography>
+          <Typography variant="subtitle2" color="textSecondary">{moment(task.startDate).format('DD/MM/YYYY')}</Typography>
+
+          {/* <Typography variant="subtitle2">{task.startDate}</Typography> */}
 
 
         {/* <CardContent>

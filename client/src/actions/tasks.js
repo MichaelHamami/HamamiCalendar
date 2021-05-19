@@ -3,7 +3,7 @@ import * as api from '../api/index.js';
 import {createTask } from '../api/index.js';
 
 export const getTasks = () => async (dispatch) => {
-  console.log("getTasks called in actions");
+  // console.log("getTasks called in actions");
 
   try {
     const { data } = await api.fetchTasks();
@@ -16,7 +16,7 @@ export const getTasks = () => async (dispatch) => {
 
 export const createtask = (task) => async (dispatch) => {
   try {
-    console.log("createTask called in actions changed");
+    // console.log("createTask called in actions changed");
     const { data } = await createTask(task);
 
     dispatch({ type: CREATE, payload: data });
@@ -26,7 +26,7 @@ export const createtask = (task) => async (dispatch) => {
 }
 
 export const updateTask = (id, task) => async (dispatch) => {
-  console.log("updateTask called in actions");
+  // console.log("updateTask called in actions");
   try {
     console.log(task);
 

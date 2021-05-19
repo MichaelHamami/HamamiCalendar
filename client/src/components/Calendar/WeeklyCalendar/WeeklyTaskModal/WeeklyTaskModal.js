@@ -19,7 +19,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 const WeeklyTaskModal = ({task,currentId = 0,show=false, onClose}) => {
 
-  const [taskData, setTaskData] = useState({ name: task.name, description: task.description, startDate: new Date(task.startDate),group:task.group,startTime:task.startTime});
+  const [taskData, setTaskData] = useState({ name: task.name, description: task.description, startDate: new Date(task.startDate), group: task.group, startTime: task.startTime});
 
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -29,7 +29,7 @@ const WeeklyTaskModal = ({task,currentId = 0,show=false, onClose}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("handleSubmit called in Form.js");
+    // console.log("handleSubmit called in Form.js");
     var user_ID = ''
     if(!user?.result?._id)
     {
@@ -42,8 +42,8 @@ const WeeklyTaskModal = ({task,currentId = 0,show=false, onClose}) => {
     onClose();
   };
 
-  console.log("task modal task:");
-  console.log(taskData);
+  // console.log("task modal task:");
+  // console.log(taskData);
 if(!show) return null
   return (
     <Modal show={show} onHide={onClose}>
