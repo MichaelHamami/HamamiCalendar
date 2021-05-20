@@ -1,7 +1,15 @@
+.page {
+  height: auto;
+  margin-top: 5%;
+}
+
 .navbar-text {
   text-align: left;
   margin-left: 0;
-  padding: left 0;
+  position: absolute;
+  top: 40%;
+  left: 2%;
+  color: white;
 }
 .developer-background {
   background-image: url(developer.jpg);
@@ -17,10 +25,6 @@
   font-weight: 400;
   line-height: 1.5;
   text-align: left;
-}
-.img-fluid {
-  max-width: 100%;
-  height: auto;
 }
 
 img {
@@ -49,7 +53,7 @@ img {
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1rem;
-  background-color: rgb(43, 226, 89);
+  background-color: rgb(9, 24, 29);
 }
 .navbar-brand {
   display: inline-block;
@@ -111,8 +115,10 @@ p.lead {
 }
 #sideNav .navbar-brand .img-profile {
   max-width: 80%;
-  min-width: 80%;
-
+  min-width: 10%;
+  height: auto;
+  position: absolute;
+  top: 20%;
   border: 0.5rem solid rgba(255, 255, 255, 0.2);
 }
 

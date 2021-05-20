@@ -29,7 +29,9 @@
   cursor: pointer;
   opacity: 0.9;
 }
-
+.WeeklyCalendar {
+  margin-top: 10%;
+}
 .calendar-header {
   display: flex;
   justify-content: space-between;

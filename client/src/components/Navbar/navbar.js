@@ -36,7 +36,7 @@ const Navbar = () => {
   // eslint-disable-next-line
 
   return (
-    <AppBar className={classes.appBar} position="static" color="inherit">
+    <AppBar className={classes.appBar} position="absolute" color="inherit">
       <div className={classes.brandContainer}>
         <Typography
           component={Link}

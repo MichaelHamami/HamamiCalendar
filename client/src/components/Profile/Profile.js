@@ -32,6 +32,8 @@ const Profile = () => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("profile"));
+
     if (user) {
       var [first_n, last_n] = user.result.name.split(" ");
       setProfile({
@@ -49,7 +51,7 @@ const Profile = () => {
   };
   if (!user?.result?._id && !user?.result?.googleId) {
     return (
-      <Paper>
+      <Paper className={classes.profile}>
         <Typography variant="h6" align="center">
           Please Sign In to have Profile.
         </Typography>
@@ -58,53 +60,53 @@ const Profile = () => {
   }
   return (
     <>
-      <Typography variant="h4" align="center">
-        Profile
-      </Typography>
-      <Container>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            className={classes.buttonSubmit}
-            name="firstName"
-            onChange={handleChange}
-            variant="outlined"
-            fullWidth
-            value={profile.firstName}
-            label="firstName"
-            type="text"
-            marginButtom="2"
-          ></TextField>
-          <TextField
-            className={classes.buttonSubmit}
-            name="lastName"
-            onChange={handleChange}
-            variant="outlined"
-            value={profile.lastName}
-            fullWidth
-            label="lastName"
-            type="text"
-          ></TextField>
-          <Typography
-            variant="h6"
-            align="left"
-            className={classes.buttonSubmit}
-          >
-            Email: {user.result.email}
-          </Typography>
-          {user.result?.phoneVerified ? null : (
+      <div className={classes.profile}>
+        <Typography variant="h4" align="center">
+          Profile
+        </Typography>
+        <Container>
+          <form onSubmit={handleSubmit}>
             <TextField
               className={classes.buttonSubmit}
-              name="phoneNumber"
+              name="firstName"
               onChange={handleChange}
               variant="outlined"
-              required
               fullWidth
-              label="phoneNumber"
-              type="number"
+              value={profile.firstName}
+              label="firstName"
+              type="text"
             ></TextField>
-          )}
-        </form>
-        {/* <Button
+            <TextField
+              className={classes.buttonSubmit}
+              name="lastName"
+              onChange={handleChange}
+              variant="outlined"
+              value={profile.lastName}
+              fullWidth
+              label="lastName"
+              type="text"
+            ></TextField>
+            <Typography
+              variant="h6"
+              align="left"
+              className={classes.buttonSubmit}
+            >
+              Email: {user.result.email}
+            </Typography>
+            {user.result?.phoneVerified ? null : (
+              <TextField
+                className={classes.buttonSubmit}
+                name="phoneNumber"
+                onChange={handleChange}
+                variant="outlined"
+                required
+                fullWidth
+                label="phoneNumber"
+                type="number"
+              ></TextField>
+            )}
+          </form>
+          {/* <Button
             component={Link}
             to="/profile"
             color="primary"
@@ -112,31 +114,31 @@ const Profile = () => {
           >
             Profile
           </Button> */}
-        <Button
-          component={Link}
-          to="/changeEmail"
-          color="primary"
-          className={classes.homeBtn}
-        >
-          Change Email
-        </Button>
-        <Button
-          component={Link}
-          to="/setPhone"
-          color="primary"
-          className={classes.homeBtn}
-        >
-          Set Phone for SMS Remainders
-        </Button>
-        <Button
-          component={Link}
-          to="/changePassword"
-          color="primary"
-          className={classes.homeBtn}
-        >
-          Change Password
-        </Button>
-        {/* <Button className={classes.buttonAdvanced} onClick={changeEmail}>
+          <Button
+            component={Link}
+            to="/changeEmail"
+            color="primary"
+            className={classes.homeBtn}
+          >
+            Change Email
+          </Button>
+          <Button
+            component={Link}
+            to="/setPhone"
+            color="primary"
+            className={classes.homeBtn}
+          >
+            Set Phone for SMS Remainders
+          </Button>
+          <Button
+            component={Link}
+            to="/changePassword"
+            color="primary"
+            className={classes.homeBtn}
+          >
+            Change Password
+          </Button>
+          {/* <Button className={classes.buttonAdvanced} onClick={changeEmail}>
           Change Email
         </Button>
         <Button className={classes.buttonAdvanced} onClick={setPhoneNumber}>
@@ -145,7 +147,8 @@ const Profile = () => {
         <Button className={classes.buttonAdvanced} onClick={changePassword}>
           Change Password
         </Button> */}
-      </Container>
+        </Container>
+      </div>
     </>
   );
 };

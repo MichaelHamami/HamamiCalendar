@@ -15,7 +15,7 @@ import {
 // TODO add auth middleware before deployment and check it
 router.post("/signin", signin);
 router.post("/signup", signup);
-router.get("/email-activate/:token", activateUser);
+router.post("/email-activate/:token", activateUser);
 
 router.patch("/changePassword", changePassword);
 router.patch("/editProfile", editProfile);

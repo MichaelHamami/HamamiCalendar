@@ -21,8 +21,8 @@ const url_tasks = "http://localhost:5000/tasks";
 // For the middleware
 API.interceptors.request.use((request) => {
   if (localStorage.getItem("profile")) {
-    console.log(request.headers);
-    console.log(request);
+    // console.log(request.headers);
+    // console.log(request);
 
     request.headers.Authorization = `Bearer ${
       JSON.parse(localStorage.getItem("profile")).token
@@ -50,6 +50,8 @@ export const deleteTask = (id) => API.delete(`/tasks/${id}`);
 
 export const signIn = (formData) => API.post("/user/signin", formData);
 export const signUp = (formData) => API.post("/user/signup", formData);
+export const activateUser = (token) =>
+  API.post(`/user/email-activate/${token}`);
 
 // Advanced
 // export const deleteRepeatedTasks =  (group) => axios.delete(`${url_tasks}/repeated/${group}`);

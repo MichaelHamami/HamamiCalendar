@@ -104,7 +104,12 @@ export const activateUser = async (req, res) => {
       );
 
       // return res.status(201).json({ result: result, token: newToken });
-      return res.redirect("http://localhost:3000");
+      // return res.redirect("http://localhost:3000");
+      return res.json({
+        result: result,
+        token: newToken,
+        message: "Email Activated Successfully",
+      });
     } catch (error) {
       res.status(500).json({ message: "Something went wrong" });
       console.log(error);
@@ -122,13 +127,14 @@ export const signup = async (req, res) => {
   try {
     const oldUser = await UserModal.findOne({ email });
 
-    if (oldUser)
-      return res.status(400).json({ message: "User already exists" });
+    if (oldUser) return res.json({ error: "User already exists" });
+
+    // return res.status(400).json({ message: "User already exists" });
     const name = `${firstName} ${lastName}`;
     const token = jwt.sign({ name, email, password }, secret, {
       expiresIn: "1h",
     });
-    const url = `http://localhost:5000/user/email-activate/${token}`;
+    const url = `http://localhost:3000/activate/${token}`;
     var mailOptions = {
       from: process.env.email_server,
       to: email,
@@ -142,11 +148,11 @@ export const signup = async (req, res) => {
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log(error);
-        return res.json({ error: "Something went wrong" });
+        return res.json({ error: "Sending mail went wrong" });
         // return res.status(400).json({error:"Something went wrong"});
       }
       console.log("Email sent: " + info.response);
-      return res.json({
+      return res.status(200).json({
         message:
           "Link has been sent to your email please click on it to activate your user",
         token: token,
@@ -160,8 +166,9 @@ export const signup = async (req, res) => {
   }
 };
 
+// Login function
 export const signin = async (req, res) => {
-  console.log("signin called in controllers");
+  console.log("signin (login)called in controllers");
   console.log(req.body);
   // console.log(req);
 
@@ -170,13 +177,15 @@ export const signin = async (req, res) => {
   try {
     const oldUser = await UserModal.findOne({ email });
 
-    if (!oldUser)
-      return res.status(404).json({ message: "User doesn't exist" });
+    // if (!oldUser) return res.status(404).json({ error: "User doesn't exist" });
+    if (!oldUser) return res.json({ error: "User doesn't exist" });
 
     const isPasswordCorrect = await bcrypt.compare(password, oldUser.password);
 
-    if (!isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid credentials" });
+    if (!isPasswordCorrect) return res.json({ error: "Invalid credentials" });
+    // return res.status(400).send({ error: "Invalid credentials" });
+
+    // return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
       expiresIn: "1h",

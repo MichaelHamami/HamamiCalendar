@@ -16,7 +16,8 @@ import Auth from "./components/Auth/auth";
 import ChangeEmail from "./components/Profile/ChangeEmail";
 import ChangePassword from "./components/Profile/ChangePassword";
 import setPhone from "./components/Profile/setPhone";
-import ActivateUser from "./components/Auth/activate_user";
+import ActivateUser from "./components/Auth/ActivateUser";
+import EmailLink from "./components/Auth/EmailLink";
 // import Tasks from './components/Tasks/tasks';
 
 const App = () => (
@@ -30,7 +31,8 @@ const App = () => (
         <Route path="/" exact component={Home} />
         {/* <Route path="/" exact component={Tasks} /> */}
         <Route path="/auth" exact component={Auth} />
-        <Route path="/activate" exact component={ActivateUser} />
+        <Route path="/email_confirm" exact component={EmailLink} />
+        <Route path="/activate/:token" exact component={ActivateUser} />
         <Route path="/task" exact component={TaskForm} />
 
         <Route path="/changeEmail" exact component={ChangeEmail} />
