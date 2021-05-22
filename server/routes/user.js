@@ -21,7 +21,7 @@ router.patch("/changePassword", changePassword);
 router.patch("/editProfile", editProfile);
 
 router.post("/changeEmail", changeEmail);
-router.patch("/confirmEmail", confirmEmail);
+router.patch("/confirmEmail/:token", confirmEmail);
 
 router.post("/add-phone", addPhone);
 

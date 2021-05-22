@@ -79,14 +79,16 @@ const WeeklyCalendar2 = () => {
   const [showModal, setShowModal] = useState(false);
   // eslint-disable-next-line
   const [modalInfo, setModalInfo] = useState(null);
+  const user = JSON.parse(localStorage.getItem("profile"));
 
   // better version
   // const [today , setToday] = useState(() => moment());
 
-  const tasks = useSelector((state) => state.tasks);
+  var tasks = useSelector((state) => state.tasks);
   const tasksEachDay = Array(days.length)
     .fill()
     .map(() => Array(hours.length));
+
   const renderHeader = (today) => {
     var start_day = today.startOf("week").toDate().getDate();
     var start_month = today.startOf("week").toDate().getMonth();
@@ -146,18 +148,23 @@ const WeeklyCalendar2 = () => {
     // console.log("useEffect called");
     // dispatch(getWeekTasks(today));
     // console.log(today);
-
+    const user = JSON.parse(localStorage.getItem("profile"));
+    if (user) {
+      dispatch(
+        getWeekTasksOfUser(
+          moment(today.startOf("week").toDate()).format("YYYY-MM-DD")
+        )
+      ).then(orderTasksInArray());
+    } else {
+      tasks = [];
+    }
     // console.log(today.startof('weeks').format('YYYY-MM-DD'));
     // moment(moment().startOf("week").toDate()).format('YYYY-MM-DD')
     // just a check not for deployement
     // dispatch(getTasks()).then(
     //   orderTasksInArray()
     // );
-    dispatch(
-      getWeekTasksOfUser(
-        moment(today.startOf("week").toDate()).format("YYYY-MM-DD")
-      )
-    ).then(orderTasksInArray());
+
     document.body.classList.add("background-none");
     return () => {
       document.body.classList.remove("background-none");

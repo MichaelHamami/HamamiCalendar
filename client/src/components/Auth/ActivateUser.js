@@ -10,7 +10,6 @@ const ActivateUser = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
-  const user = JSON.parse(localStorage.getItem("profile"));
   const { token } = useParams();
   console.log(token);
   useEffect(() => {

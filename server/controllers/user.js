@@ -199,16 +199,14 @@ export const signin = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
-// from: "hamami.calendar@gmail.com",
 export const changePassword = async (req, res) => {
   console.log("changePassword called in controllers");
   const { email, oldPassword, newPassword } = req.body;
-
+  console.log(req.body);
   try {
     const oldUser = await UserModal.findOne({ email });
 
-    if (!oldUser)
-      return res.status(404).json({ message: "User doesn't exist" });
+    if (!oldUser) return res.status(404).json({ error: "User doesn't exist" });
 
     const isPasswordCorrect = await bcrypt.compare(
       oldPassword,
@@ -216,7 +214,9 @@ export const changePassword = async (req, res) => {
     );
 
     if (!isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid credentials" });
+      // return res.status(400).json({ error: "Invalid credentials" });
+      return res.json({ error: "Old Password incorrect" });
+
     const hashedPassword = await bcrypt.hash(newPassword, 12);
     console.log(hashedPassword);
     const filter = { email: email };
@@ -243,17 +243,21 @@ export const editProfile = async (req, res) => {
 export const changeEmail = async (req, res) => {
   console.log("changeEmail called in controllers");
   const { oldEmail, newEmail } = req.body;
+  console.log(`called with: oldEmail: ${oldEmail} newEmail: ${newEmail}`);
+  const oldUser = await UserModal.findOne({ email: newEmail });
 
-  const oldUser = await UserModal.findOne({ newEmail });
-
-  if (oldUser) return res.status(400).json({ message: "Email already exists" });
+  // if (oldUser) return res.status(400).json({ message: "Email already exists" });
+  if (oldUser)
+    return res.json({ message: "Email already exists", type: "Error" });
 
   const token = jwt.sign({ newEmail, oldEmail }, secret, {
     expiresIn: "5m",
   });
   // TODO
   // need to sent them link to client page and from them do axios request to server
-  const url = `http://localhost:5000/user/confirmEmail/${token}`;
+  // const url = `http://localhost:5000/user/confirmEmail/${token}`;
+  const url = `http://localhost:3000/email_change_activate/${token}`;
+
   var mailOptions = {
     from: process.env.email_server,
     to: newEmail,
@@ -280,14 +284,17 @@ export const changeEmail = async (req, res) => {
 
 export const confirmEmail = async (req, res) => {
   console.log("confirmEmail called in controllers");
-  const { token } = req.body;
+  const { token } = req.params;
+  console.log(req);
 
   console.log("token is:" + token);
   let new_email, old_email;
   if (token) {
     jwt.verify(token, secret, function (err, decodedToken) {
       if (err) {
-        return res.status(400).json({ error: "Incorrect  or Expired Link" });
+        return res.json({ error: "Incorrect  or Expired Link" });
+
+        // return res.status(400).json({ error: "Incorrect  or Expired Link" });
       }
       const { oldEmail, newEmail } = decodedToken;
       new_email = newEmail;
@@ -300,15 +307,22 @@ export const confirmEmail = async (req, res) => {
       const user = await UserModal.findOneAndUpdate(filter, update, {
         new: true,
       });
-
+      const newToken = jwt.sign({ email: user.email, id: user._id }, secret, {
+        expiresIn: "1h",
+      });
       console.log(user);
       // return res.status(201).json({ result: result, token: newToken });
-      return res.json({ message: "Email changed" });
+      // return res.json({ message: "Email changed" });
+      return res.json({
+        message: "Email changed",
+        result: user,
+        token: newToken,
+      });
     } catch (error) {
       res.status(500).json({ message: "Something went wrong" });
       console.log(error);
     }
   } else {
-    return res.json({ error: "Something went wrong on if else" });
+    return res.json({ error: "Something went wrong on token" });
   }
 };

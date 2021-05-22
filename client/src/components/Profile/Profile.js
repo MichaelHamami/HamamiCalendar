@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   TextField,
   Button,
@@ -8,8 +10,9 @@ import {
 } from "@material-ui/core";
 import useStyles from "./styles";
 import { Link, useHistory, useLocation } from "react-router-dom";
-
 const Profile = () => {
+  const dispatch = useDispatch();
+
   const user = JSON.parse(localStorage.getItem("profile"));
   const initialState = {
     firstName: "",
@@ -19,15 +22,15 @@ const Profile = () => {
   };
   const classes = useStyles();
   const [profile, setProfile] = useState(initialState);
-  const changePassword = () => {
-    console.log("changePassword called");
-  };
-  const setPhoneNumber = () => {
-    console.log("setPhoneNumber called");
-  };
-  const changeEmail = () => {
-    console.log("changeEmail called");
-  };
+  // const changePassword = () => {
+  //   console.log("changePassword called");
+  // };
+  // const setPhoneNumber = () => {
+  //   console.log("setPhoneNumber called");
+  // };
+  // const changeEmail = () => {
+  //   console.log("changeEmail called");
+  // };
   const handleChange = (e) =>
     setProfile({ ...profile, [e.target.name]: e.target.value });
 
@@ -48,6 +51,9 @@ const Profile = () => {
     e.preventDefault();
     console.log("handle Submit called");
     console.log(profile);
+    if (user) {
+      dispatch();
+    }
   };
   if (!user?.result?._id && !user?.result?.googleId) {
     return (

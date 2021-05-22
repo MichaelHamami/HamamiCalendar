@@ -9,3 +9,7 @@ export const PARTIAL_FETCH = "PARTIAL_FETCH";
 export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";
 export const ERROR = "ERROR";
+
+export const PROFILE_ERROR = "PROFILE_ERROR";
+export const PROFILE_SUCCESS = "PROFILE_SUCCESS";
+export const PROFILE_AUTH = "PROFILE_AUTH";

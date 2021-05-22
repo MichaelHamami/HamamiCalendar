@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
@@ -35,13 +35,13 @@ const SignUp = () => {
   const classes = useStyles();
   var errors = useSelector((state) => state.auth.errors);
 
-  console.log(errors);
+  // console.log("component log");
   var error_null = { data: { error: null } };
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
   const [showToast, setShowToast] = useState(false);
   const [error, setError] = useState(errors);
-  console.log(error);
+  // console.log(error);
   const switchMode = () => {
     console.log("switchMode called");
     setForm(initialState);
@@ -50,7 +50,13 @@ const SignUp = () => {
     setError(null);
     dispatch({ type: "ERROR", error_null });
   };
-
+  useEffect(() => {
+    console.log("use Effect called in auth");
+    return () => {
+      console.log("use Effect unmounts called in auth");
+      dispatch({ type: "ERROR", error_null });
+    };
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isSignup) {
@@ -159,11 +165,7 @@ const SignUp = () => {
             </Grid>
           </Grid>
         </form>
-        <MyToast
-          show={errors ? true : false}
-          message={errors}
-          type={"danger"}
-        />
+        <MyToast show={errors ? true : false} message={errors} type={"Error"} />
       </Paper>
     </Container>
   );

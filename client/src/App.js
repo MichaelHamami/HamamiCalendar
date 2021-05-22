@@ -19,7 +19,7 @@ import setPhone from "./components/Profile/setPhone";
 import ActivateUser from "./components/Auth/ActivateUser";
 import EmailLink from "./components/Auth/EmailLink";
 // import Tasks from './components/Tasks/tasks';
-
+import ConfirmEmail from "./components/Profile/ConfirmEmail";
 const App = () => (
   <BrowserRouter>
     <Container>
@@ -33,9 +33,16 @@ const App = () => (
         <Route path="/auth" exact component={Auth} />
         <Route path="/email_confirm" exact component={EmailLink} />
         <Route path="/activate/:token" exact component={ActivateUser} />
+
         <Route path="/task" exact component={TaskForm} />
 
         <Route path="/changeEmail" exact component={ChangeEmail} />
+        <Route
+          path="/email_change_activate/:token"
+          exact
+          component={ConfirmEmail}
+        />
+
         <Route path="/setPhone" exact component={setPhone} />
         <Route path="/changePassword" exact component={ChangePassword} />
       </Switch>
