@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Typography, Container } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 import MyToast from "../MyToast/MyToast";
@@ -22,6 +22,7 @@ const ConfirmEmail = () => {
       console.log(`call dispatch with token: ${token}`);
       dispatch(confirmEmail(token, history));
     }
+    // eslint-disable-next-line
   }, [token]);
   return (
     <Container component="main" className={classes.profile}>

@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 // eslint-disable-next-line
-import {
-  Card,
-  CardActions,
-  CardContent,
-  Button,
-  Typography,
-  Avatar,
-} from "@material-ui/core/";
+import { Avatar } from "@material-ui/core/";
 import Table from "react-bootstrap/Table";
 import WeeklyCellTask from "./WeeklyCellTask/WeeklyCellTask";
 import WeeklyTaskModal from "./WeeklyTaskModal/WeeklyTaskModal";
@@ -17,11 +10,7 @@ import moment from "moment";
 // eslint-disable-next-line
 import { useDispatch, useSelector } from "react-redux";
 // eslint-disable-next-line
-import {
-  getTasks,
-  getWeekTasks,
-  getWeekTasksOfUser,
-} from "../../../actions/tasks";
+import { getWeekTasksOfUser } from "../../../actions/tasks";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./weeklycalendar2.css";
 import useStyles from "./styles";

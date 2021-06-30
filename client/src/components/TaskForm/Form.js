@@ -1,6 +1,13 @@
 // eslint-disable-next-line
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Typography, Paper } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Checkbox,
+  FormControlLabel,
+} from "@material-ui/core";
 import Collapse from "react-bootstrap/Collapse";
 // eslint-disable-next-line
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +21,7 @@ import { createtask, createRepeatedTasks } from "../../actions/tasks";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-import "./form.css";
+// import "./form.css";
 import OutlinedDiv from "./OutlinedDiv";
 import moment from "moment";
 // import {createRepeatedTasks, deleteRepeatedTasks} from '../../api/index';
@@ -28,6 +35,7 @@ const TaskForm = () => {
     startTime: "00:00",
     repeat_days: 0,
     endDate: new Date(),
+    email_remainder: false,
   });
   const [open, setOpen] = useState(false);
 
@@ -35,31 +43,32 @@ const TaskForm = () => {
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("profile"));
   const handleChange = (e) =>
-    setTaskData({ ...taskData, [e.target.name]: e.target.value });
+    setTaskData({
+      ...taskData,
+      [e.target.name]: e.target.value,
+    });
   const clear = () => {
     setTaskData({
       name: "",
       description: "",
-      startTime: "",
-      startDate: "",
+      startTime: "00:00",
+      startDate: new Date(),
       group_id: 0,
-      endDate: "",
+      endDate: new Date(),
       repeat_days: 0,
+      email_remainder: false,
     });
   };
-
+  // console.log(taskData);
   const handleSubmit = (e) => {
     e.preventDefault();
     // console.log("handleSubmit called in Form.js");
-
     let user_ID = "";
     if (!user?.result?._id) {
       user_ID = user.result.googleId;
     } else {
       user_ID = user.result._id;
     }
-    // console.log(taskData);
-    // console.log("we calling createtask");
     var single_task = {
       startDate: new Date(taskData.startDate),
       name: taskData.name,
@@ -67,6 +76,9 @@ const TaskForm = () => {
       startTime: taskData.startTime,
       group: taskData.group_id,
       creator: user_ID,
+      email_remainder: taskData.email_remainder,
+      sms_remainder: false,
+
     };
 
     if (taskData.repeat_days > 0 && taskData.endDate > taskData.startDate) {
@@ -75,26 +87,27 @@ const TaskForm = () => {
       var moment_end_date = moment(taskData.endDate);
       var diff_days = moment_end_date.diff(moment_start_date, "days");
       // let amount = taskData.endDate.diff(taskData.startDate, "days");
-      console.log(diff_days);
+      // console.log(diff_days);
       var tasks = [];
       tasks.push(single_task);
       var currentDate = taskData.startDate;
       var repeat_days = taskData.repeat_days;
-      console.log(currentDate);
+      // console.log(currentDate);
       var task = {};
       var current = currentDate.setDate(
         currentDate.getDate() + Number(repeat_days)
       );
       while (currentDate <= taskData.endDate) {
-        console.log(currentDate);
+        // console.log(currentDate);
         task = {
           startDate: new Date(current),
           name: taskData.name,
-          // name: `repeat task ${i}`,
           description: taskData.description,
           startTime: taskData.startTime,
           group: taskData.group_id,
           creator: user_ID,
+          email_remainder: taskData.email_remainder,
+          sms_remainder: false,
         };
         current = currentDate.setDate(
           currentDate.getDate() + Number(repeat_days)
@@ -105,11 +118,8 @@ const TaskForm = () => {
       dispatch(createRepeatedTasks(tasks));
     } else {
       console.log("create single task called");
-
       dispatch(createtask(single_task));
     }
-
-    // clear();
   };
 
   if (!user?.result?._id && !user?.result?.googleId) {
@@ -159,8 +169,8 @@ const TaskForm = () => {
         />
         <OutlinedDiv label="Start Date">
           <DatePicker
-            // className={classes.datepicker}
-            className="datepicker_form"
+            className={classes.datepicker_form}
+            // className="datepicker_form"
             variant="outlined"
             label="Start Date"
             name="startDate"
@@ -170,6 +180,19 @@ const TaskForm = () => {
             minDate={new Date()}
           />
         </OutlinedDiv>
+        <FormControlLabel
+          className={classes.checkbox_form}
+          control={
+            <Checkbox
+              checked={taskData.email_remainder}
+              onChange={(e) =>
+                setTaskData({ ...taskData, email_remainder: e.target.checked })
+              }
+              name="email_remainder"
+            />
+          }
+          label="Email Remainder"
+        />
 
         <Button
           className={classes.buttonAdvanced}

@@ -30,9 +30,14 @@ export default makeStyles((theme) => ({
     justifyContent: "space-between",
     width: "400px",
   },
+  task: {
+    color: "white"
+
+  },
   userName: {
     display: "flex",
     alignItems: "center",
+    color: "white"
   },
   brandContainer: {
     display: "flex",

@@ -13,8 +13,7 @@ const restAPI = whatsAppClient.restAPI({
 });
 
 // var mailOptions = {
-//     // from: process.env.email_server,
-//     from: "hamami.calendar@gmail.com",
+//     // from: process.env.email_server_user,
 //     to: email,
 //     subject: "User Activation Link",
 //     html: `
@@ -40,7 +39,7 @@ export const sendEmailRemainder = async (task, email_to) => {
   );
 
   var mailOptions = {
-    from: process.env.email_server,
+    from: process.env.email_server_from,
     to: email_to,
     subject: "Task Remainder",
     html: `

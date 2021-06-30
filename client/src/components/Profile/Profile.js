@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import {
   TextField,
@@ -9,7 +9,7 @@ import {
   Container,
 } from "@material-ui/core";
 import useStyles from "./styles";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 const Profile = () => {
   const dispatch = useDispatch();
 
@@ -123,7 +123,7 @@ const Profile = () => {
           <Button
             component={Link}
             to="/changeEmail"
-            color="primary"
+            // color="primary"
             className={classes.homeBtn}
           >
             Change Email

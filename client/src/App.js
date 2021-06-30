@@ -8,10 +8,13 @@ import Profile from "./components/Profile/Profile";
 // import Calendar from './components/Calendar/Calendar';
 // eslint-disable-next-line
 // import WeeklyCalendar from './components/Calendar/WeeklyCalendar/WeeklyCalendar';
-import WeeklyCalendar2 from "./components/Calendar/WeeklyCalendar/WeeklyCalendar2";
+// import WeeklyCalendar2 from "./components/Calendar/WeeklyCalendar/WeeklyCalendar2";
+import MonthlyCalendar from "./components/Calendar/MonthlyCalendar/MonthlyCalendar";
 
 import TaskForm from "./components/TaskForm/Form";
-import Navbar from "./components/Navbar/navbar";
+// import Navbar from "./components/Navbar/navbar";
+import Navbar from "./components/Navbar/navbar2";
+
 import Auth from "./components/Auth/auth";
 import ChangeEmail from "./components/Profile/ChangeEmail";
 import ChangePassword from "./components/Profile/ChangePassword";
@@ -22,10 +25,12 @@ import EmailLink from "./components/Auth/EmailLink";
 import ConfirmEmail from "./components/Profile/ConfirmEmail";
 const App = () => (
   <BrowserRouter>
-    <Container>
+    <Container fluid>
       <Navbar />
       <Switch>
-        <Route path="/calendar" exact component={WeeklyCalendar2} />
+        {/* <Route path="/calendar" exact component={WeeklyCalendar2} /> */}
+        <Route path="/calendar" exact component={MonthlyCalendar} />
+
         {/* <Route path="/" exact component={Calendar} /> */}
         <Route path="/profile" exact component={Profile} />
         <Route path="/" exact component={Home} />

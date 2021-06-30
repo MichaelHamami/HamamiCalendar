@@ -3,9 +3,19 @@ import mongoose from "mongoose";
 import moment from "moment";
 import Agenda from "agenda";
 import dotenv from "dotenv";
+import UserModal from "../models/user.js";
+
 import { sendEmailRemainder, sendSMSRemainder } from "../Utils/utils.js";
 
 dotenv.config();
+const mongoConnectionString = process.env.CONNECTION_URL;
+const agenda = new Agenda({
+  db: {
+    address: mongoConnectionString,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  },
+});
 
 export const getTasks = async (request, response) => {
   console.log("get Tasks called");
@@ -13,6 +23,14 @@ export const getTasks = async (request, response) => {
     const tasks = await Task.find();
     // const tasks = await Task.find({creator: request.userId});
     // console.log(tasks);
+    const jobs = await agenda.jobs(
+      { name: "send task remainder" }
+      // { data: -1 },
+      // 3,
+      // 1
+    );
+    console.log(jobs);
+    console.log(jobs[0].attrs.data);
     response.status(200).json(tasks);
   } catch (error) {
     response.status(404).json({ message: error });
@@ -38,6 +56,9 @@ export const createTask = async (req, res) => {
   if (!req.userId) {
     return response.json({ message: "Unauthenticated" });
   }
+  const userId = req.userId;
+  const user = await UserModal.findById(userId);
+  console.log(user);
   const task = req.body;
 
   const newTask = new Task({ ...task, creator: req.userId });
@@ -45,8 +66,11 @@ export const createTask = async (req, res) => {
 
   try {
     await newTask.save();
-    res.setHeader("Content-Type", "application/json");
 
+    if (newTask.email_remainder) {
+      scheduleRemainder(newTask, user.email,0);
+    }
+    // res.setHeader("Content-Type", "application/json");
     res.status(200).json(newTask);
   } catch (error) {
     res.status(409).json({ message: error });
@@ -86,7 +110,9 @@ export const updateTask = async (req, res) => {
   const theUpdated = await Task.findByIdAndUpdate(id, updatedTask, {
     new: true,
   });
-
+  // if (theUpdated.email_remainder) {
+  //   scheduleRemainder(theUpdated, user.email);
+  // }
   res.json(theUpdated);
 };
 
@@ -95,14 +121,21 @@ export const createRepeatedTasks = async (req, res) => {
   if (!req.userId) {
     return response.json({ message: "Unauthenticated" });
   }
+  const userId = req.userId;
+  const user = await UserModal.findById(userId);
+  console.log(user);
   const tasks = req.body;
-  let newTasks = tasks.map(
-    (task) => new Task({ ...task, creator: req.userId })
-  );
-
+  let newTasks = tasks.map((task) => {
+     var currentTask = new Task({ ...task, creator: req.userId });
+     if(currentTask.email_remainder)
+     {
+      scheduleRemainder(currentTask, user.email,0);
+     }
+    return currentTask;
+  });
+  console.log(newTasks);
   try {
     await Task.insertMany(newTasks);
-    res.setHeader("Content-Type", "application/json");
 
     res.status(200).json(newTasks);
   } catch (error) {
@@ -253,6 +286,36 @@ export const getWeekTasksOfUser = async (request, response) => {
     response.status(404).json({ message: error });
   }
 };
+export const getTasksBetweenDatesOfUser = async (request, response) => {
+  console.log("getTasksBetweenDates called in server Controllers");
+  console.log(request.userId);
+  if (!request.userId) {
+    return response.json({ message: "Unauthenticated" });
+  }
+  try {
+    const { startDate, endDate } = request.params;
+
+    console.log("startDate: " + startDate);
+    console.log("endDate: " + endDate);
+    const start_date = new Date(startDate);
+    const end_date = new Date(endDate);
+    console.log(start_date);
+    console.log(end_date);
+
+    const tasks = await Task.aggregate([
+      {
+        $match: {
+          startDate: { $gte: start_date, $lte: end_date },
+          creator: request.userId,
+        },
+      },
+    ]);
+    console.log(tasks);
+    response.status(200).json(tasks);
+  } catch (error) {
+    response.status(404).json({ message: error });
+  }
+};
 
 export const getWeekTasksOfUserSpecial = async (request, response) => {
   console.log("getWeekTasksOfUserSpecial called in server Controllers2");
@@ -286,83 +349,6 @@ export const getWeekTasksOfUserSpecial = async (request, response) => {
     response.status(200).json(orderedTasks);
   } catch (error) {
     response.status(404).json({ message: error });
-  }
-};
-const mongoConnectionString = process.env.CONNECTION_URL;
-const agenda = new Agenda({
-  db: {
-    address: mongoConnectionString,
-  },
-});
-agenda.define(
-  "send task remainder",
-  { priority: "high", concurrency: 10 },
-  async (job) => {
-    console.log("the schedule job function called");
-    const { task_id, email_to, phoneNumber } = job.attrs.data;
-    console.log(task_id);
-    console.log(email_to);
-    const task = await Task.findById(task_id);
-    console.log(task);
-    console.log(task.sms_remainder);
-    console.log(task.email_remainder);
-    if (task.email_remainder) {
-      console.log("we will send email");
-      sendEmailRemainder(task, email_to);
-    }
-    if (task.sms_remainder) {
-      console.log("sms remainder set true");
-      if (phoneNumber) {
-        console.log("phone number exits");
-        var message_to_sent = `There is an task named: ${task.name} set to this hour: ${task.startTime}`;
-        sendSMSRemainder(phoneNumber, message_to_sent);
-      }
-    }
-  }
-);
-
-export const scheduleRemainder = async (req, res) => {
-  console.log("scheduleRemainder called in server Controllers");
-  const { taskID, email_to, phoneNumber } = req.body;
-  console.log(taskID);
-  console.log(email_to);
-  console.log(phoneNumber);
-
-  const task = await Task.findById(taskID);
-  console.log(task);
-
-  // console.log(task.startDate);
-  var [hour, minutes] = task.startTime.split(":");
-  hour = Number(hour);
-  minutes = Number(minutes);
-  console.log(hour);
-  console.log(minutes);
-  var dateToSend = new Date(task.startDate);
-  dateToSend.setHours(hour, minutes - 30, 0, 0);
-  // var dateToSend = new Date(
-  //   Date.UTC(
-  //     task.startDate.getUTCFullYear(),
-  //     task.startDate.getUTCMonth(),
-  //     task.startDate.getUTCDate(),
-  //     hour, // hours
-  //     minutes - 30, // minutes
-  //     0, // sec
-  //     0 // milisec
-  //   )
-  // );
-  console.log(dateToSend);
-  try {
-    (async function () {
-      await agenda.start();
-      await agenda.schedule(dateToSend, "send task remainder", {
-        task_id: taskID,
-        email_to: email_to,
-        phoneNumber: phoneNumber,
-      });
-      return res.json("Schedule a job");
-    })();
-  } catch (error) {
-    res.status(409).json({ message: error });
   }
 };
 
@@ -408,4 +394,93 @@ const orderTasksInArray = (tasks) => {
     tasksEachDay[day_task_index][hour_index] = task;
   });
   return tasksEachDay;
+};
+
+agenda.define(
+  "send task remainder",
+  { priority: "high", concurrency: 10 },
+  async (job) => {
+    console.log("the schedule job function called");
+    const { task_id, email_to, phoneNumber, dateScheduled, task_start_date } =
+      job.attrs.data;
+    // console.log(task_id);
+    // console.log(email_to);
+    // console.log(dateScheduled);
+    const task = await Task.findById(task_id);
+    // console.log(task);
+    // console.log(task.sms_remainder);
+    // console.log(task.email_remainder);
+    // console.log(task.startDate);
+    // console.log(task_start_date);
+    if (task.email_remainder) {
+      if (task_start_date.toDateString() === task.startDate.toDateString()) {
+        var now_plus_5 = new Date();
+        now_plus_5.setMinutes(now_plus_5.getMinutes() + 5);
+        var now_minus_30 = new Date();
+        now_minus_30.setMinutes(now_minus_30.getMinutes() - 30);
+        // console.log(now_minus_30);
+        if (dateScheduled >= now_minus_30 && dateScheduled <= now_plus_5) {
+          console.log("we will send email");
+          sendEmailRemainder(task, email_to);
+        } else {
+          console.log("date to send incorrect should not send now...");
+        }
+      } else {
+        console.log(
+          "Task startDate not equals to task date of job means task date changed..."
+        );
+      }
+    } else {
+      console.log("task email remainder not allowed");
+    }
+    // if (task.sms_remainder) {
+    //   console.log("sms remainder set true");
+    //   if (phoneNumber) {
+    //     console.log("phone number exits");
+    //     var message_to_sent = `There is an task named: ${task.name} set to this hour: ${task.startTime}`;
+    //     sendSMSRemainder(phoneNumber, message_to_sent);
+    //   }
+    // }
+  }
+);
+
+// export const scheduleRemainder = async (req, res) => {
+// console.log("scheduleRemainder called in server Controllers");
+// const { taskID, email_to, phoneNumber } = req.body;
+export const scheduleRemainder = async (task, email_to, phoneNumber) => {
+  console.log("scheduleRemainder called in server Controllers");
+  // console.log(taskID);
+  // console.log(email_to);
+  // console.log(phoneNumber);
+
+  // const task = await Task.findById(taskID);
+  // console.log(task);
+
+  // console.log(task.startDate);
+  var [hour, minutes] = task.startTime.split(":");
+  hour = Number(hour);
+  minutes = Number(minutes);
+  // console.log(hour);
+  // console.log(minutes);
+  var dateToSend = new Date(task.startDate);
+  dateToSend.setHours(hour, minutes - 30, 0, 0);
+  // console.log(`datetosend: ${dateToSend}`);
+  try {
+    (async function () {
+      await agenda.start();
+      await agenda.schedule(dateToSend, "send task remainder", {
+        // task_id: taskID,
+        task_id: task._id,
+        email_to: email_to,
+        phoneNumber: phoneNumber,
+        task_start_date: task.startDate,
+        dateScheduled: dateToSend,
+      });
+      console.log("Schedule a job");
+      // return res.json("Schedule a job");
+    })();
+  } catch (error) {
+    console.log("scheduleRemainder ~ error", error);
+    // res.status(409).json({ message: error });
+  }
 };

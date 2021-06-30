@@ -1,13 +1,6 @@
-import React, { useEffect, useState } from "react";
-import {
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  Container,
-} from "@material-ui/core";
+import React, { useState } from "react";
+import { TextField, Button, Container } from "@material-ui/core";
 import useStyles from "./styles";
-import { Link, useHistory, useLocation } from "react-router-dom";
 import MyToast from "../MyToast/MyToast";
 import { changePassword } from "../../api/index";
 const ChangePassword = () => {

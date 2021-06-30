@@ -15,8 +15,18 @@ export default makeStyles((theme) => ({
     // flexWrap: 'wrap',
     // justifyContent: 'center',
   },
+  checkbox_form: {
+    margin: theme.spacing(1),
+    width: "100%",
+  },
   buttonSubmit: {
     marginBottom: 10,
+  },
+  datepicker_form: {
+    border: "none",
+    outline: "none",
+    width: "100%",
+    margin: "7px",
   },
   datepicker: {
     width: "100%",

@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  Container,
-} from "@material-ui/core";
+import { TextField, Button, Container } from "@material-ui/core";
 import useStyles from "./styles";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import MyToast from "../MyToast/MyToast";
 import { useDispatch, useSelector } from "react-redux";
-import { changeEmail, confirmEmail } from "../../actions/userProfile";
+import { changeEmail } from "../../actions/userProfile";
 const ChangeEmail = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
   const classes = useStyles();
@@ -19,8 +13,8 @@ const ChangeEmail = () => {
   const history = useHistory();
   const message = useSelector((state) => state.profile.profile_message);
   const type = useSelector((state) => state.profile.message_type);
-  console.log(message);
-  console.log(type);
+  // console.log(message);
+  // console.log(type);
 
   const handleChange = (e) => setEmail(e.target.value);
   useEffect(() => {

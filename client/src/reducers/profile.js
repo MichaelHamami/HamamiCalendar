@@ -38,7 +38,7 @@ const profileReducer = (
         message_type: "Success",
       };
     default:
-      console.log(`defualt reducer in profileReducer`);
+      // console.log(`defualt reducer in profileReducer`);
       return { ...state, profile_message: null, message_type: null };
   }
 };

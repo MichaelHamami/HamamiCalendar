@@ -53,7 +53,13 @@ dotenv.config();
 //     });
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors({ origin: "*" }));
+app.use(
+  cors({
+    origin: "*",
+    methods: ["POST", "GET", "PATCH", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
 // app.use((req, res, next) => {
 
 app.use("/tasks", taskRoutes);

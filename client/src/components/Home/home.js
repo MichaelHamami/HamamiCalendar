@@ -4,6 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import "./home.css";
+import Image from 'react-bootstrap/Image'
+
+
+import { Container,Row,Col } from "react-bootstrap";
 
 const Home = () => {
   useEffect(() => {
@@ -16,53 +20,46 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="page" id="page-top">
-      {/* <!-- Navigation--> */}
-      <nav className="navbar navbar-expand-lg  fixed-top" id="sideNav">
-        <div className="navbar-brand">
-          <img
-            className="img-fluid img-profile rounded-circle mx-auto mb-2"
-            src={MichaelImage}
-            alt="..."
-          />
-        </div>
-        <div className="collapse navbar-collapse">
+    
+<Container>
+  <Row>
+    <Col sm={3}>
+    <div className="mt-3">
+    <Image src={MichaelImage} rounded fluid />
           <p className="navbar-text">
             Email: hamami2010@gmail.com<br></br>
             Phone: 050-832-0025 <br></br>
             City: Bney-Dror, Close to Ranana/Netanya
           </p>
-        </div>
-      </nav>
-      {/* <!-- Page Content--> */}
-      <div className="container-fluid p-0">
+        </div>      
+      </Col>
+    <Col sm={7}>
+    <div>
         {/* <!-- About--> */}
-        <section className="resume-section" id="about">
-          <div className="resume-section-content">
-            <h4 className="mb-0">
+          <div className="navbar-text">
+            <h4>
               <p>
-                {" "}
-                Welcome :) <br></br> This is my Calendar Project
+
+                Welcome {":)"} <br></br> This is my Calendar Project
               </p>
             </h4>
             <div className="subheading mb-4">
               <p> My name is Michael Hamami </p>
             </div>
             <p className="lead mb-4">
-              I am Full-Stack Developer - B.Sc. Software Engineering 1 Month to
-              gradute.<br></br>
+              I am Full-Stack Developer - B.Sc. Software Engineering.<br></br>
               Interested in a Junior full-time position.<br></br>
-              This website deployed so you can see what i can do :) <br></br>{" "}
+              This website deployed so you can see what i can do {":)"} <br></br>
             </p>
             <h3>
-              {" "}
-              If you think i can be in your team/company contact me :) <br></br>
-              detailes on the left navbar{" "}
-            </h3>{" "}
+ 
+              If you think i can be in your team/company contact me {":)"} <br></br>
+              details on the left or above {":) "}
+            </h3>
             <br></br>
-            <h4>Sign in to explore/use my Calendar</h4>
+            <h4>Sign in to explore my Calendar Website</h4>
             <h4>
-              If you see any bug or want to help me, contact me :) i would love
+              If you see any bug or want to help me, contact me i would love
               to hear you<br></br>
             </h4>
             <div className="social-icons">
@@ -83,15 +80,18 @@ const Home = () => {
                 <FontAwesomeIcon icon={faGithub} size="lg" />
               </a>
             </div>
-            <p className="mt-2">
-              {" "}
+            <p className="last-text mt-2">
               Maybe not the best designer but having fun learning to do new
               things
             </p>
           </div>
-        </section>
-      </div>
-    </div>
+    </div> 
+        </Col>
+  </Row>
+</Container>
+
+
+      
   );
 };
 

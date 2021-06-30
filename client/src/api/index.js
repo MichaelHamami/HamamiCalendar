@@ -65,3 +65,6 @@ export const getTasksByDayAndHourOfUser = (startDate, startTime) =>
   API.get(`/tasks/day/${startDate}/hour/${startTime}`);
 export const getWeekTasksOfUser = (startDate) =>
   API.get(`/tasks/week/${startDate}`);
+
+export const getTasksBetweenDatesOfUser = (startDate, endDate) =>
+  API.get(`/tasks/week/startdate/${startDate}/enddate/${endDate}`);
