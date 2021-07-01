@@ -35,7 +35,7 @@ export const createtask = (task) => async (dispatch) => {
 export const updateTask = (id, task) => async (dispatch) => {
   // console.log("updateTask called in actions");
   try {
-    console.log(task);
+    // console.log(task);
 
     const { data } = await api.updateTask(id, task);
 
@@ -67,7 +67,7 @@ export const deleteRepeatedTasks = (group) => async (dispatch) => {
 
 export const createRepeatedTasks = (tasks) => async (dispatch) => {
   try {
-    console.log("createRepeatedTasks called in actions");
+    // console.log("createRepeatedTasks called in actions");
     const { data } = await api.createRepeatedTasks(tasks);
 
     dispatch({ type: CREATE_GROUP, payload: data });
@@ -76,7 +76,7 @@ export const createRepeatedTasks = (tasks) => async (dispatch) => {
   }
 };
 export const getTasksByDayOfUser = (startDate) => async (dispatch) => {
-  console.log("getTasksByDay called in actions");
+  // console.log("getTasksByDay called in actions");
 
   try {
     const { data } = await api.getTasksByDayOfUser(startDate);
@@ -104,7 +104,7 @@ export const getTasksByDayAndHourOfUser =
   };
 
 export const getWeekTasksOfUser = (startDate) => async (dispatch) => {
-  console.log("getWeekTasks called in actions with date: " + startDate);
+  // console.log("getWeekTasks called in actions with date: " + startDate);
 
   try {
     const { data } = await api.getWeekTasksOfUser(startDate);
@@ -115,7 +115,7 @@ export const getWeekTasksOfUser = (startDate) => async (dispatch) => {
   }
 };
 export const getTasksByDay = (startDate) => async (dispatch) => {
-  console.log("getTasksByDay called in actions");
+  // console.log("getTasksByDay called in actions");
 
   try {
     const { data } = await api.getTasksByDay(startDate);
@@ -128,7 +128,7 @@ export const getTasksByDay = (startDate) => async (dispatch) => {
 
 export const getTasksByDayAndHour =
   (startDate, startTime) => async (dispatch) => {
-    console.log("getTasksByDayAndHour called in actions");
+    // console.log("getTasksByDayAndHour called in actions");
 
     try {
       const { data } = await api.getTasksByDayAndHour(startDate, startTime);
@@ -140,7 +140,7 @@ export const getTasksByDayAndHour =
   };
 
 export const getWeekTasks = (startDate) => async (dispatch) => {
-  console.log("getWeekTasks called in actions with date: " + startDate);
+  // console.log("getWeekTasks called in actions with date: " + startDate);
 
   try {
     const { data } = await api.getWeekTasks(startDate);
@@ -153,14 +153,14 @@ export const getWeekTasks = (startDate) => async (dispatch) => {
 
 export const getTasksBetweenDatesOfUser =
   (startDate, endDate) => async (dispatch) => {
-    console.log(
-      `getTasksBetweenDatesOfUser called in actions with start date: ${startDate} and end date: ${endDate}`
-    );
+    // console.log(
+    //   `getTasksBetweenDatesOfUser called in actions with start date: ${startDate} and end date: ${endDate}`
+    // );
 
     try {
       const { data } = await api.getTasksBetweenDatesOfUser(startDate, endDate);
-      console.log(`data returned in actions from server`);
-      console.log(data);
+      // console.log(`data returned in actions from server`);
+      // console.log(data);
       dispatch({ type: FETCH_ALL, payload: data });
     } catch (error) {
       console.log(error);

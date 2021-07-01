@@ -1,297 +1,282 @@
-  
-// import React, { useState, useEffect } from 'react';
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import { Avatar } from "@material-ui/core/";
+import Table from "react-bootstrap/Table";
+import WeeklyCellTask from "./WeeklyCellTask/WeeklyCellTask";
+import WeeklyTaskModal from "./WeeklyTaskModal/WeeklyTaskModal";
 import moment from "moment";
-import "./weeklycalander.css";
-// eslint-disable-next-line
-import { TextField, Button } from '@material-ui/core';
-import * as api from '../../../api/index';
-import WeeklyCellTask from './WeeklyCellTask/WeeklyCellTask';
-import WeeklyTaskModal from './WeeklyTaskModal/WeeklyTaskModal';
-// import { TextField, Button, Typography, Paper, requirePropFactory } from '@material-ui/core';
-// import Task from '../Tasks/Task/task';
-// import { Grid, CircularProgress } from '@material-ui/core';
-// import { Grid } from '@material-ui/core';
+import { useDispatch, useSelector } from "react-redux";
+import { getWeekTasksOfUser } from "../../../actions/tasks";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Dropdown from "react-bootstrap/Dropdown";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./weeklycalendar.css";
+import useStyles from "./styles";
 
-// import useStyles from './styles';
-
-  export default class WeeklyCalendar extends React.Component {
-    
-    constructor(props) {
-      super(props);
-      this.state = {
-        monthNames: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ],
-        days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-        today: moment(),
-        current: moment().startOf("week").utc(true), //current position on calendar (first day of month)
-      hours:[
-        "00:00",
-        "01:00",
-        "02:00",
-        "03:00",
-        "04:00",
-        "05:00",
-        "06:00",
-        "07:00",
-        "08:00",
-        "09:00",
-        "10:00",
-        "11:00",
-      ],
-      tasks: this.getWeekTasks(moment(moment().startOf("week").toDate()).format('YYYY-MM-DD')),
-      tasks0:[],tasks1:[],tasks2:[],tasks3:[],tasks4:[], tasks5:[],tasks6:[],tasks7:[],
-      tasksArray:{},
-      modalOpened:"asdasdas"
-    };
-      
-      this.lastWeek = this.lastWeek.bind(this);
-      this.nextWeek = this.nextWeek.bind(this);
-      this.getWeekTasks = this.getWeekTasks.bind(this);
-      this.orderTasksByDaysToEachArray = this.orderTasksByDaysToEachArray.bind(this);
-      this.check = this.check.bind(this);
-
-
-    }
-     toggleModal(){
-      this.setState(prevState => ({ modalOpened: !prevState.modalOpened }));
-    }
-    getWeekTasks(start_week) {
-      // var start_week = this.state.today.startOf("week").toDate();
-      console.log(start_week);
-      api.getWeekTasks(start_week).then((result) => {
-        this.setState({ tasks: result.data });
-        this.orderTasksByDaysToEachArray(result.data);
-      });
-    }
-    orderTasksByDaysToEachArray(tasks) {
-      var tasks_days = {
-        tasks1:[],
-        tasks2:[],
-        tasks3:[],
-        tasks4:[],
-        tasks5:[],
-        tasks6:[],
-        tasks7:[],
-      };
-      tasks.forEach((task)=>{
-        var day = moment(task.startDate).toDate().getUTCDay();
-
-        if(day === 1) tasks_days.tasks1.push(task);
-        if(day === 2) tasks_days.tasks2.push(task);
-        if(day === 3) tasks_days.tasks3.push(task);
-        if(day === 4) tasks_days.tasks4.push(task);
-        if(day === 5) tasks_days.tasks5.push(task);
-        if(day === 6) tasks_days.tasks6.push(task);
-        if(day === 7) tasks_days.tasks7.push(task);
-      });
-      console.log(tasks_days);
-      // id={day_index + " "+hour_index}
-      if(tasks.length !== 0)
-      {
-        var day_index = moment(tasks[0].startDate).toDate().getUTCDay();
-        // var id = day_index+" "+"01:00";
-        var id =`${day_index} 01:00`;
-        console.log(id);
-        var div = document.getElementById(id);
-        console.log(div);
-        // removing elements but not text
-        // while (div.lastElementChild) {
-        //   div.removeChild(div.lastElementChild);
-        // }
-      }
-
-
-
-    }
-    renderModal()
-    {
-      console.log("render Modal called");
-      // eslint-disable-next-line
-    {/* this.state.modalOpened ? <WeeklyTaskModal toggle={this.togglePop} /> : null */}
-      if(this.state.tasks?.length)
-      {
-        console.log("trying to open modal");
-        return <WeeklyTaskModal task={this.state.tasks[0]} />;
-      }
-      else
-      {
-        return null;
-      }
-    }
-      //sets current week to previous week
-    lastWeek() {
-      console.log(this.state.tasks);
-
-      this.setState({ today: this.state.today.subtract(1, "week") });
-      this.getWeekTasks(this.state.today.format('YYYY-MM-DD'));
-
-    }
-    //sets current week to following week
-    nextWeek() {
-      console.log(this.state.tasks);
-      this.setState({ today: this.state.today.add(1, "week") });
-      this.getWeekTasks(this.state.today.format('YYYY-MM-DD'));
-    }
-    renderHeader()
-    {
-      let start_day = this.state.today.startOf("week").toDate().getDate();
-      let start_month = this.state.today.startOf("week").toDate().getMonth();
-      let start_year = this.state.today.startOf("week").toDate().getFullYear();
-
-
-      let end_day = this.state.today.endOf("week").toDate().getDate();
-      let end_month = this.state.today.endOf("week").toDate().getMonth();
-      let end_year = this.state.today.endOf("week").toDate().getFullYear();
-
-      if(start_month !== end_month)
-      {
-        end_month = " - "+this.state.monthNames[end_month];
-      }
-      else{
-        end_month ="";
-      }
-      if(end_year > start_year)
-      {
-        end_year = " - "+end_year;
-      }
-      else
-      {
-        end_year="";
-      }
-      start_month = this.state.monthNames[start_month];
-      let header = start_day + " - " + end_day +" "+ start_month + end_month +" "+ start_year + end_year;
-      return header;
-    }
-
-   renderDays() {
-    return [
-    <div className="day-name-header" key="s">"Time"</div>, 
-    this.state.days.map((x, i) => (
-      <div className="day-name-header"
-        key={"day-of-week-" + i}>
-        {x}
-      </div>
-    ))
+const WeeklyCalendar2 = () => {
+  const dispatch = useDispatch();
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const classes = useStyles();
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
-  }
-  check(id) {
-    console.log("check called id:"+id);
-  }
-  renderCells(tasksEachHourAndDay) {
-    return [
-      this.state.hours.map((hour,hour_index) => (
-        [<div className="hour"
-            key={"hour"}>
-            {hour}
-        </div>,
-      this.state.days.map((day,day_index) => (
-        <div
-        className="cell"
-        // id={day_index + " "+hour}
-        id={`${day_index} ${hour}`}
-        key={"cell-" + day_index +" "+ hour}
-        // onClick={this.check}
-        // onClick="click(shalom)"
-        // onClick= {() => this.check(day_index+" "+hour)}
-        onClick= {() => this.check(`${day_index} ${hour}`)}
+  const hours = [
+    "00:00",
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+  ];
+  // moment() will be called everytime function rendered
+  const [today, setToday] = useState(moment());
+  const [showModal, setShowModal] = useState(false);
+  const [modalInfo, setModalInfo] = useState(null);
+  const user = JSON.parse(localStorage.getItem("profile"));
 
+  // better version
+  // const [today , setToday] = useState(() => moment());
+  const renderTooltip = (props,text="next month") => (
+    <Tooltip id="button-tooltip" {...props}>
+      {text}
+    </Tooltip>
+  );
+  var tasks = useSelector((state) => state.tasks);
 
-        // onClick={this.check("cell-" + day_index +" "+ hour)}
-        >
-        {/* day: {day} day_index:{day_index}
-        hour: {hour} hour_index:{hour_index} */}
-        {this.state.tasks?.length? <WeeklyCellTask task={this.state.tasks[0]}/> : "No Task"}
-        {/* day: {day} <br></br>
-        hour: {hour} */}
-        {/* <div className="text cell">
-        day: {day} <br></br>
-        hour: {hour}
-        </div> */}
-      </div>
-      ))
-      ]))
-    ];
-  }
-  // renderHours() {
-  //   return [
-  //   // this.state.days.map((day,day_index) => (
-  //   //   this.state.hours.map((hour,hour_index) => (
-  //     this.state.hours.map((hour,hour_index) => (
-  //       <div className="hour-list"
-  //       key={"hour "+ hour_index}>
-  //       hour: {hour}
-  //     </div>
-  //   ))
-  //   ];
-  // }
-  render() {
-    return (
-    <div
-    className="weekly-calendar"
-    css={[{
-      fontSize: "18px",
-      border: "1px solid",
-      minWidth: "300px",
-      position: "relative",
-      borderColor: "LightGray",
-      color: "#51565d",
-    },
-  ]}>  
-      {/* start header */}
+  const tasksEachDayAndHour = Array(days.length)
+    .fill()
+    .map(() => Array(hours.length).fill().map(() =>[]));
+
+    console.log("tasks_each_hour_and_day");
+    console.log(tasksEachDayAndHour);
+
+  const renderHeader = (today) => {
+    var start_day = today.startOf("week").toDate().getDate();
+    var start_month = today.startOf("week").toDate().getMonth();
+    var start_year = today.startOf("week").toDate().getFullYear();
+
+    var end_day = today.endOf("week").toDate().getDate();
+    var end_month = today.endOf("week").toDate().getMonth();
+    var end_year = today.endOf("week").toDate().getFullYear();
+
+    if (start_month !== end_month) {
+      end_month = " - " + monthNames[end_month];
+    } else {
+      end_month = "";
+    }
+    if (end_year > start_year) {
+      end_year = " - " + end_year;
+    } else {
+      end_year = "";
+    }
+    start_month = monthNames[start_month];
+    var header =
+      start_day +
+      " - " +
+      end_day +
+      " " +
+      start_month +
+      end_month +
+      " " +
+      start_year +
+      end_year;
+    return header;
+  };
+  const appendTasksToCell = (day_index, hour_index) => {
+    // console.log(`appendTasksToCell called with day_index: ${day_index} and hour ${hour_index}`);
+    // console.log(tasksEachDayAndHour);
+    // console.log(tasks);
+    if (tasksEachDayAndHour.length !== 0) {
+      if(tasksEachDayAndHour[day_index][hour_index].length !== 0)
+      {
+        console.log("we get here");
+        return tasksEachDayAndHour[day_index][hour_index].map(task =>{
+          console.log("here do we get??????ASDASDASD import");
+          console.log(task);
+          if (task)
+          return (
+            <WeeklyCellTask
+              key={task._id}
+              task={task}
+              click={() => {
+                setShowModal(true);
+                setModalInfo(task);
+              }}
+            />
+          );
+        });
+        
+      }
+      // var task = tasksEachDayAndHour[day_index][hour_index];
+    } else {
+      return "";
+    }
+  };
+
+  useEffect(() => {
+    // console.log("useEffect called");
+    // dispatch(getWeekTasks(today));
+    // console.log(today);
+    const user = JSON.parse(localStorage.getItem("profile"));
+    if (user) {
+      dispatch(
+        getWeekTasksOfUser(
+          moment(today.startOf("week").toDate()).format("YYYY-MM-DD")
+        )
+      );
+    } else {
+      // maybe create toast to make the user known he need to login
+      tasks = [];
+    }
+    document.body.classList.add("background-none");
+    return () => {
+      document.body.classList.remove("background-none");
+    };
+  }, [dispatch, today]);
+
+  const orderTasksInArray = () => {
+    // console.log("orderTasksInArray called");
+    tasks.forEach((task) => {
+      var day_task_index = moment(task.startDate).toDate().getUTCDay();
+      // console.log(task.startDate);
+      // console.log(day_task_index);
+
+      var hour = `${task.startTime.substring(0, 2)}:00`;
+      var hour_index = hours.indexOf(hour);
+      // tasksEachDay[day_task_index][hour_index] = task;
+      tasksEachDayAndHour[day_task_index][hour_index].push(task);
+
+    });
+  };
+  const lastWeek = () => {
+    // console.log("lastWeek called");
+    setToday((prevToday) => prevToday.clone().subtract(1, "weeks"));
+  };
+
+  //sets current week to following week
+  const nextWeek = () => {
+    // console.log("nextWeek called");
+    setToday((prevToday) => prevToday.clone().add(1, "weeks"));
+  };
+  // console.log("render");
+  orderTasksInArray();
+  return (
+    <>
+      {console.log(tasks)}
+      {modalInfo !== null ? (
+        <WeeklyTaskModal
+          show={showModal}
+          onClose={() => {
+            setShowModal(false);
+            setModalInfo(null);
+          }}
+          task={modalInfo}
+        />
+      ) : null}
+
+      <div className="WeeklyCalendar">
+        {/* start header */}
         <div className="calendar-header">
-          <div
-            className="calendar-navigate"
-            onClick={this.lastWeek}
+        <OverlayTrigger 
+              placement="left"
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(null,"last month")}
             >
+          <div className="calendar-navigate" onClick={() => lastWeek()}>
             &#10094;
           </div>
+          </OverlayTrigger>
+
           <div>
-            <h2 className="calendar-title">
-              {this.renderHeader()}
-            </h2>
+            <h2 className="calendar-title">{renderHeader(today)}</h2>
           </div>
-          <div
-            className="calendar-navigate"
-            onClick={this.nextWeek}
-             >
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip(null,"next month")}
+          >
+          <div className="calendar-navigate" onClick={() => nextWeek()}>
             &#10095;
           </div>
-          {this.renderModal()}
+          </OverlayTrigger>
 
-        {/* end of header */}
+          {/* end of header */}
         </div>
-        {/* <div className="hour-list">
-          {this.renderHours()}
-        </div>
-        <div className="day-name-header">
-          {this.renderDays()}
-        </div> */}
-        {/* start of body */}
-        <div className="calendar-body">
-          {this.renderDays()}
-          {/* {this.renderHours()} */}
-          {this.renderCells()}
-          {/* {this.state.modalOpened ? <WeeklyTaskModal toggle={this.togglePop} /> : null} */}
+        <Dropdown >
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+            Calender Types
+          </Dropdown.Toggle>
 
-        {/* end of body */}
-        </div>
-        {/* {this.renderModal()} */}
-
-    {/* end of calender */}
-    </div>
+          <Dropdown.Menu>
+            <Dropdown.Item href="/weeklycalendar">Weekly Calendar</Dropdown.Item>
+            <Dropdown.Item href="/calendar">Monthly Calendar </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Table bordered className="mt-2">
+          <thead className="table_header_numbers_css">
+            <tr className="table_header_numbers_css">
+              {["Time", ...days].map((day, index) => (
+                <th key={index}>
+                  {day}
+                  <Avatar classes={{ root: classes.table_header_numbers }}>
+                    {index === 0 ? "T" : today.clone().subtract(7-index, "days").date()}
+                  </Avatar>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {hours.map((hour, hour_index) => (
+              <tr key={hour_index}>
+                {["Time", ...days].map((day, day_index) => (
+                  <td
+                    key={`${hour_index},${day_index}`}
+                    id={`${hour}+${day_index}`}
+                  >
+                    {day_index === 0 ? hour : ""}
+                    {day_index > 0 && tasks.length
+                      ? appendTasksToCell(day_index - 1, hour_index)
+                      : ""}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        {console.log(tasksEachDayAndHour)}
+      </div>
+    </>
+    
   );
-}
-}
+};
+
+export default WeeklyCalendar2;

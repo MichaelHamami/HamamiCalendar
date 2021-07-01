@@ -3,15 +3,15 @@ import * as api from "../api/index.js";
 
 export const signin = (formData, router) => async (dispatch) => {
   try {
-    console.log("signin called on actions");
+    // console.log("signin called on actions");
     const { data } = await api.signIn(formData);
     // console.log(data);
     if (data.error) {
-      console.log("there is an error detect in actions");
+      // console.log("there is an error detect in actions");
       dispatch({ type: ERROR, data });
       // alert(data.error);
     } else {
-      console.log("no error detect in actions signin with data");
+      // console.log("no error detect in actions signin with data");
 
       dispatch({ type: AUTH, data });
       router.push("/");
@@ -19,17 +19,17 @@ export const signin = (formData, router) => async (dispatch) => {
     // dispatch({ type: AUTH, data });
     // router.push("/");
   } catch (error) {
-    console.log("catch in signin action");
+    // console.log("catch in signin action");
     console.log(error);
   }
 };
 
 export const signup = (formData, router) => async (dispatch) => {
   try {
-    console.log("signup called on actions");
+    // console.log("signup called on actions");
 
     const { data } = await api.signUp(formData);
-    console.log(data);
+    // console.log(data);
     // api.signUp(formData);
     if (data.error) {
       dispatch({ type: ERROR, data });
@@ -42,9 +42,9 @@ export const signup = (formData, router) => async (dispatch) => {
   }
 };
 export const activateUser = (token, router) => async (dispatch) => {
-  console.log("activate User called in actions");
+  // console.log("activate User called in actions");
   const { data } = await api.activateUser(token);
-  console.log(data);
+  // console.log(data);
   if (data.error) {
     dispatch({ type: ERROR, data });
   } else {

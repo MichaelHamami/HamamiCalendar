@@ -43,7 +43,7 @@ const SignUp = () => {
   const [error, setError] = useState(errors);
   // console.log(error);
   const switchMode = () => {
-    console.log("switchMode called");
+    // console.log("switchMode called");
     setForm(initialState);
     setIsSignup((prevIsSignup) => !prevIsSignup);
     setShowPassword(false);
@@ -51,9 +51,9 @@ const SignUp = () => {
     dispatch({ type: "ERROR", error_null });
   };
   useEffect(() => {
-    console.log("use Effect called in auth");
+    // console.log("use Effect called in auth");
     return () => {
-      console.log("use Effect unmounts called in auth");
+      // console.log("use Effect unmounts called in auth");
       dispatch({ type: "ERROR", error_null });
     };
   }, []);

@@ -1,61 +1,43 @@
 import React, { useState, useEffect } from "react";
-// eslint-disable-next-line
-// import {
-//   Card,
-//   CardActions,
-//   CardContent,
-//   Button,
-//   Typography,
-//   Avatar,
-// } from "@material-ui/core/";
 import Table from "react-bootstrap/Table";
-// import WeeklyCellTask from "../WeeklyCalendar/WeeklyCellTask/WeeklyCellTask";
 import TaskCell from "../TaskCell/TaskCell";
-
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import TaskModal from "../TaskModal/TaskModal";
-// eslint-disable-next-line
-// import ReactDOM from "react-dom";
 import moment from "moment";
-// eslint-disable-next-line
 import { useDispatch, useSelector } from "react-redux";
-// eslint-disable-next-line
 import { getTasksBetweenDatesOfUser } from "../../../actions/tasks";
 import "bootstrap/dist/css/bootstrap.min.css";
 import useStyles from "./styles";
-
+import Row from "react-bootstrap/Row";
+import Dropdown from "react-bootstrap/Dropdown";
+import {Col, Container } from "react-bootstrap";
 const MonthlyCalendar = () => {
   const dispatch = useDispatch();
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const classes = useStyles();
-  //   var today = moment();
-  // eslint-disable-next-line
+  
+  // better version
+  // const [today , setToday] = useState(() => moment());
   const [today, setToday] = useState(moment());
 
   const first_day = today.clone().startOf("month").startOf("week");
   const last_day = today.clone().endOf("month").endOf("week");
   const num_of_days = last_day.diff(first_day, "days");
   // console.log(num_of_days + 1);
-
+   const next_mont = "next month custom";
   const num_of_weeks = last_day.diff(first_day, "weeks");
-  //   const weeks = Array(num_of_weeks + 1);
   const weeks = [...new Array(num_of_weeks + 1)].map(
     (i, index) => `week ${index}`
   );
-
-  const tasksEachDay = Array(num_of_days + 1)
+  const renderTooltip = (props,text="next month") => (
+    <Tooltip id="button-tooltip" {...props}>
+      {text}
+    </Tooltip>
+  );
+  var tasksEachDay = Array(num_of_days + 1)
     .fill()
     .map(() => []);
-
-  // .map(() => Array());
-  // console.log(tasksEachDay);
-  // weeks.forEach((week) => {
-  //   tasksEachDay[0].push(week);
-  // });
-  // console.log(tasksEachDay);
-
-  // console.log(weeks);
-
-  //   const last_day = first_day.clone().add(34, "days");
   const monthNames = [
     "January",
     "February",
@@ -70,15 +52,9 @@ const MonthlyCalendar = () => {
     "November",
     "December",
   ];
-  //   const weeks = ["week1", "week2", "week3", "week4", "week5"];
-  // moment() will be called everytime function rendered
   const [showModal, setShowModal] = useState(false);
-  //   // eslint-disable-next-line
   const [modalInfo, setModalInfo] = useState(null);
-  //   const user = JSON.parse(localStorage.getItem("profile"));
 
-  // better version
-  // const [today , setToday] = useState(() => moment());
 
   var tasks = useSelector((state) => state.tasks);
 
@@ -120,38 +96,38 @@ const MonthlyCalendar = () => {
     if (user) {
       // console.log(first_day.format("YYYY-MM-DD"));
       // console.log(last_day.format("YYYY-MM-DD")); getTasksBetweenDatesOfUser
+      // var first_day = today.clone().startOf("month").startOf("week");
+      // var last_day = today.clone().endOf("month").endOf("week");
       dispatch(
         getTasksBetweenDatesOfUser(
           first_day.format("YYYY-MM-DD"),
           last_day.format("YYYY-MM-DD")
-        )
-      );
+      ));
     }
     // eslint-disable-next-line
   }, [dispatch, today]);
 
   const orderTasksInArray = () => {
-    console.log("orderTasksInArray called");
+    // console.log("orderTasksInArray called");
     // console.log(tasks);
 
     if (tasks.length > 0) {
+      // console.log(tasks);
       tasks.forEach((task) => {
         // console.log(task);
+        // console.log(tasksEachDay);
+
         // var day_task = moment(task.startDate).toDate().getDate();
         var moment_task = moment(task.startDate);
         // console.log(moment_task);
         const diff_task_from_first = moment_task.diff(first_day, "days");
+        // console.log(moment_task);
+        // console.log(first_day);
         // console.log(diff_task_from_first);
-
-        // console.log(task.startDate);
-        // console.log(day_task_index);
-
-        // var hour = `${task.startTime.substring(0, 2)}:00`;
-        // var hour_index = hours.indexOf(hour);
-        if (diff_task_from_first >= 0)
+        if (diff_task_from_first >= 0 && diff_task_from_first<tasksEachDay.length)
           tasksEachDay[diff_task_from_first].push(task);
       });
-      console.log(tasksEachDay);
+      // console.log(tasksEachDay);
     }
   };
   const lastMonth = () => {
@@ -188,18 +164,59 @@ const MonthlyCalendar = () => {
         {/* <div className="WeeklyCalendar"> */}
         {/* start header */}
         {/* <div className="calendar-header"> */}
-        <div className={classes.calendarHeader}>
-          <div className="calendar-navigate" onClick={() => lastMonth()}>
-            &#10094;
-          </div>
-          <div>
-            <h2 className="calendar-title">{renderHeader(today)}</h2>
-          </div>
-          <div className="calendar-navigate" onClick={() => nextMonth()}>
+        {/* <Row className="justify-content-md-center align-items-center"> */}
+        <Container >
+        <Row className="justify-content-md-center align-items-center" xs={3}>
+          <Col md={{span:1}}>
+          <OverlayTrigger 
+              placement="left"
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(null,"last month")}
+            >
+              <div onClick={() => lastMonth()}>
+                &#10094;
+              </div>
+            </OverlayTrigger>
+          </Col>
+          <Col md={{span:1}}>
+            <h2 >{renderHeader(today)}</h2>
+          </Col>
+          <Col md={{span:1}} >
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip(null,"next month")}
+          >
+          <div className={classes.rightArrow} onClick={() => nextMonth()}>
             &#10095;
-          </div>
+          </div>       
+             </OverlayTrigger>
+            </Col>
+
+          {/* <div className="calendar-navigate" onClick={() => nextMonth()}>
+            &#10095;
+          </div> */}
           {/* end of header */}
+          <Col md={{span:2, offset:2}}>
+        <div>
+        <Dropdown >
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+            Calender Types
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item href="/weeklycalendar">Weekly Calendar</Dropdown.Item>
+            <Dropdown.Item href="/calendar">Monthly Calendar </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         </div>
+        </Col>
+        </Row>
+        </Container>
+
+
+
+
         <Table bordered>
           {/* <thead className={classes.row_numbers}> */}
           <thead className="table_header">

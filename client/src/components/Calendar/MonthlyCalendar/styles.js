@@ -18,12 +18,13 @@ export default makeStyles((theme) => ({
   },
 
   WeeklyCalendar: {
-    marginTop: "15%",
+    marginTop: "5%",
   },
   calendarHeader: {
     display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    // justifyContent: "space-between",
+    justifyContent: "center",
+    alignItems: "center"
   },
   mainContainer: {
     borderRadius: 15,
@@ -37,6 +38,9 @@ export default makeStyles((theme) => ({
   heading: {
     color: "rgba(0,183,255, 1)",
     textDecoration: "none",
+  },
+  rightArrow:{
+    textAlign:"end",
   },
   image: {
     marginLeft: "15px",

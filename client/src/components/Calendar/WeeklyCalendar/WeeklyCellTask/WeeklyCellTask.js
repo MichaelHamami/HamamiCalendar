@@ -26,7 +26,7 @@ const WeeklyCellTask = ({task, click} ) => {
                 click();
             }
         }>
-      <Card className={`${classes.card} cardcustome-header`}>
+      <Card className={`${classes.card} cardcustome-header mt-2`}>
           <Typography variant="subtitle2">{task.name}</Typography>
           <Typography variant="subtitle2">{task.startTime}</Typography>
           <Typography variant="subtitle2" color="textSecondary">{moment(task.startDate).format('DD/MM/YYYY')}</Typography>
