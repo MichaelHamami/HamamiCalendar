@@ -33,9 +33,7 @@ const NavbarComp = () => {
     }
 
     setUser(JSON.parse(localStorage.getItem("profile")));
-    // eslint-disable-next-line
   }, [location]);
-  // eslint-disable-next-line
 
   return (
 
@@ -67,7 +65,7 @@ const NavbarComp = () => {
           </div>
         ) : (
           <div>
-            <Nav.Link href="/auth">Sign In</Nav.Link>
+            <Nav.Link href="/auth">Login</Nav.Link>
           </div>
         )}
     </Nav>

@@ -60,14 +60,10 @@ app.use(
     credentials: true,
   })
 );
-// app.use((req, res, next) => {
 
 app.use("/tasks", taskRoutes);
 app.use("/user", userRouter);
 
-// app.get('/', (req,res) => {
-//     res.send('Hello to Hamami Calendar API');
-// });
 
 // agenda.define(
 //   "send email report",

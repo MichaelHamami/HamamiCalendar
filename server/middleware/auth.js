@@ -18,23 +18,20 @@ const auth = async (req, res, next) => {
 
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const isCustomAuth = token.length < 500;
 
-    let decodedData;
+    if (token) {
+      const decodedData = jwt.verify(token, secret);
 
-    if (token && isCustomAuth) {
-      decodedData = jwt.verify(token, secret);
+      if(!decodedData?.id) return res.status(401).json({ message: "Unauthenticated" });
 
       req.userId = decodedData?.id;
-    } else {
-      decodedData = jwt.decode(token);
-
-      req.userId = decodedData?.sub;
+      next();
+    } else{
+      return res.status(401).json({ message: "Unauthenticated" });
     }
 
-    next();
   } catch (error) {
-    console.log(error);
+    return res.status(401).json({ message: "Unauthenticated" });
   }
 };
 

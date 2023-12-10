@@ -3,14 +3,9 @@ import smtpTransport from "nodemailer-smtp-transport";
 import Task from "../models/task.js";
 import Agenda from "agenda";
 import dotenv from "dotenv";
-import whatsAppClient from "@green-api/whatsapp-api-client";
 
 dotenv.config();
 
-const restAPI = whatsAppClient.restAPI({
-  idInstance: process.env.SMS_ID_INSTANCE,
-  apiTokenInstance: process.env.SMS_API_TOKEN_INSTANCE,
-});
 
 // var mailOptions = {
 //     // from: process.env.email_server_user,
@@ -55,24 +50,5 @@ export const sendEmailRemainder = async (task, email_to) => {
       return;
     }
     console.log("Email sent: " + info.response);
-  });
-};
-
-export const sendSMSRemainder = async (phoneNumber, message) => {
-  console.log(
-    `sendSMSRemainder called with phone: ${phoneNumber} message: ${message}`
-  );
-  // restAPI.message.sendMessage(null, 972506919091, "hayimik").then((data) => {
-  restAPI.message.sendMessage(null, phoneNumber, message).then((data) => {
-    console.log(data);
-  });
-};
-
-export const sendSMSVerifyLink = async (phoneNumber, link) => {
-  console.log(
-    `sendSMSVerifyLink called with phone: ${phoneNumber} link: ${link}`
-  );
-  restAPI.message.sendLink(null, phoneNumber, link).then((data) => {
-    console.log(data);
   });
 };

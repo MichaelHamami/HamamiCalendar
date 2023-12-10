@@ -11,11 +11,9 @@ import axios from "axios";
 const API = axios.create({ baseURL: "http://localhost:5000" });
 const url_tasks = "http://localhost:5000/tasks";
 
-// For the middleware
+// Add token to the request headers
 API.interceptors.request.use((request) => {
   if (localStorage.getItem("profile")) {
-    // console.log(request.headers);
-    // console.log(request);
 
     request.headers.Authorization = `Bearer ${
       JSON.parse(localStorage.getItem("profile")).token
@@ -35,7 +33,7 @@ export const deleteTask = (id) => API.delete(`/tasks/${id}`);
 
 // Auth
 
-export const signIn = (formData) => API.post("/user/signin", formData);
+export const login = (formData) => API.post("/user/login", formData);
 export const signUp = (formData) => API.post("/user/signup", formData);
 export const activateUser = (token) =>
   API.post(`/user/email-activate/${token}`);

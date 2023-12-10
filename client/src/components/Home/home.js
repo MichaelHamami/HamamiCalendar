@@ -1,17 +1,14 @@
 import React, { useEffect } from "react";
 import MichaelImage from "../../images/michael.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faLinkedin,faGithub } from "@fortawesome/free-brands-svg-icons";
 import "./home.css";
 import Image from 'react-bootstrap/Image'
-
-
 import { Container,Row,Col } from "react-bootstrap";
+
 
 const Home = () => {
   useEffect(() => {
-    // console.log('onMounte with useEffect');
     document.body.classList.add("developer-background");
 
     return () => {
@@ -29,7 +26,7 @@ const Home = () => {
           <p className="navbar-text">
             Email: hamami2010@gmail.com<br></br>
             Phone: 050-832-0025 <br></br>
-            City: Bney-Dror, Close to Ranana/Netanya
+            City: Netanya
           </p>
         </div>      
       </Col>
@@ -73,7 +70,7 @@ const Home = () => {
               </a>
               <a
                 className="social-icon"
-                href="https://github.com/hamamiMaestro?tab=repositories"
+                href="https://github.com/MichaelHamami?tab=repositories"
                 target="_blank"
                 rel="noreferrer"
               >

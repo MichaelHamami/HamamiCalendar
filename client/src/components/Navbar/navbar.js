@@ -15,9 +15,7 @@ const Navbar = () => {
 
   const logout = () => {
     dispatch({ type: actionType.LOGOUT });
-
     history.push("/auth");
-
     setUser(null);
   };
 
@@ -31,9 +29,7 @@ const Navbar = () => {
     }
 
     setUser(JSON.parse(localStorage.getItem("profile")));
-    // eslint-disable-next-line
   }, [location]);
-  // eslint-disable-next-line
 
   return (
     <AppBar className={classes.appBar} position="absolute" color="inherit">
@@ -100,7 +96,7 @@ const Navbar = () => {
               className={classes.create}
               color="primary"
             >
-              Sign In
+              Login
             </Button>
           </div>
         )}

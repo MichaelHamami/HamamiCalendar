@@ -5,8 +5,6 @@ import Agenda from "agenda";
 import dotenv from "dotenv";
 import UserModal from "../models/user.js";
 
-import { sendEmailRemainder, sendSMSRemainder } from "../Utils/utils.js";
-
 dotenv.config();
 const mongoConnectionString = process.env.CONNECTION_URL;
 const agenda = new Agenda({
@@ -29,8 +27,6 @@ export const getTasks = async (request, response) => {
       // 3,
       // 1
     );
-    console.log(jobs);
-    console.log(jobs[0].attrs.data);
     response.status(200).json(tasks);
   } catch (error) {
     response.status(404).json({ message: error });
@@ -38,42 +34,32 @@ export const getTasks = async (request, response) => {
 };
 
 export const getTasksOfUser = async (request, response) => {
-  console.log("getTasksOfUser called in server");
-  console.log(request.userId);
-  if (!request.userId) {
-    return response.json({ message: "Unauthenticated" });
-  }
   try {
     const tasks = await Task.find({ creator: request.userId });
-    response.status(200).json(tasks);
+    return response.status(200).json(tasks);
   } catch (error) {
-    response.status(404).json({ message: error });
+    return response.status(404).json({ message: error });
   }
 };
 
 export const createTask = async (req, res) => {
   console.log("createTask called in server Controllers");
-  if (!req.userId) {
-    return response.json({ message: "Unauthenticated" });
-  }
+  try {
   const userId = req.userId;
   const user = await UserModal.findById(userId);
-  console.log(user);
   const task = req.body;
 
-  const newTask = new Task({ ...task, creator: req.userId });
+  const newTask = new Task({ ...task, creator: userId });
   console.log(newTask);
 
-  try {
     await newTask.save();
 
     if (newTask.email_remainder) {
       scheduleRemainder(newTask, user.email,0);
     }
-    // res.setHeader("Content-Type", "application/json");
-    res.status(200).json(newTask);
+   return res.status(200).json(newTask);
   } catch (error) {
-    res.status(409).json({ message: error });
+    return res.status(500).json({ message: error });
   }
 };
 
@@ -165,9 +151,9 @@ export const getTasksByDay = async (request, response) => {
     const tasks = await Task.find({ startDate: date });
 
     // console.log(tasks);
-    response.status(200).json(tasks);
+   return response.status(200).json(tasks);
   } catch (error) {
-    response.status(404).json({ message: error });
+    return response.status(404).json({ message: error });
   }
 };
 
@@ -396,53 +382,45 @@ const orderTasksInArray = (tasks) => {
   return tasksEachDay;
 };
 
-agenda.define(
-  "send task remainder",
-  { priority: "high", concurrency: 10 },
-  async (job) => {
-    console.log("the schedule job function called");
-    const { task_id, email_to, phoneNumber, dateScheduled, task_start_date } =
-      job.attrs.data;
-    // console.log(task_id);
-    // console.log(email_to);
-    // console.log(dateScheduled);
-    const task = await Task.findById(task_id);
-    // console.log(task);
-    // console.log(task.sms_remainder);
-    // console.log(task.email_remainder);
-    // console.log(task.startDate);
-    // console.log(task_start_date);
-    if (task.email_remainder) {
-      if (task_start_date.toDateString() === task.startDate.toDateString()) {
-        var now_plus_5 = new Date();
-        now_plus_5.setMinutes(now_plus_5.getMinutes() + 5);
-        var now_minus_30 = new Date();
-        now_minus_30.setMinutes(now_minus_30.getMinutes() - 30);
-        // console.log(now_minus_30);
-        if (dateScheduled >= now_minus_30 && dateScheduled <= now_plus_5) {
-          console.log("we will send email");
-          sendEmailRemainder(task, email_to);
-        } else {
-          console.log("date to send incorrect should not send now...");
-        }
-      } else {
-        console.log(
-          "Task startDate not equals to task date of job means task date changed..."
-        );
-      }
-    } else {
-      console.log("task email remainder not allowed");
-    }
-    // if (task.sms_remainder) {
-    //   console.log("sms remainder set true");
-    //   if (phoneNumber) {
-    //     console.log("phone number exits");
-    //     var message_to_sent = `There is an task named: ${task.name} set to this hour: ${task.startTime}`;
-    //     sendSMSRemainder(phoneNumber, message_to_sent);
-    //   }
-    // }
-  }
-);
+// agenda.define(
+//   "send task remainder",
+//   { priority: "high", concurrency: 10 },
+//   async (job) => {
+//     console.log("the schedule job function called");
+//     const { task_id, email_to, phoneNumber, dateScheduled, task_start_date } =
+//       job.attrs.data;
+//     // console.log(task_id);
+//     // console.log(email_to);
+//     // console.log(dateScheduled);
+//     const task = await Task.findById(task_id);
+//     // console.log(task);
+//     // console.log(task.sms_remainder);
+//     // console.log(task.email_remainder);
+//     // console.log(task.startDate);
+//     // console.log(task_start_date);
+//     if (task.email_remainder) {
+//       if (task_start_date.toDateString() === task.startDate.toDateString()) {
+//         var now_plus_5 = new Date();
+//         now_plus_5.setMinutes(now_plus_5.getMinutes() + 5);
+//         var now_minus_30 = new Date();
+//         now_minus_30.setMinutes(now_minus_30.getMinutes() - 30);
+//         // console.log(now_minus_30);
+//         if (dateScheduled >= now_minus_30 && dateScheduled <= now_plus_5) {
+//           console.log("we will send email");
+//           sendEmailRemainder(task, email_to);
+//         } else {
+//           console.log("date to send incorrect should not send now...");
+//         }
+//       } else {
+//         console.log(
+//           "Task startDate not equals to task date of job means task date changed..."
+//         );
+//       }
+//     } else {
+//       console.log("task email remainder not allowed");
+//     }
+//   }
+// );
 
 // export const scheduleRemainder = async (req, res) => {
 // console.log("scheduleRemainder called in server Controllers");
@@ -469,7 +447,6 @@ export const scheduleRemainder = async (task, email_to, phoneNumber) => {
     (async function () {
       await agenda.start();
       await agenda.schedule(dateToSend, "send task remainder", {
-        // task_id: taskID,
         task_id: task._id,
         email_to: email_to,
         phoneNumber: phoneNumber,

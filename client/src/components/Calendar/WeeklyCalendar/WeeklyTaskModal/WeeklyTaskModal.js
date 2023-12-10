@@ -3,11 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import {Modal } from 'react-bootstrap';
-// eslint-disable-next-line
 import { useDispatch, useSelector } from 'react-redux';
-// eslint-disable-next-line 
-import moment from 'moment';
-// import Modal from 'react-modal';
 import DatePicker from "react-datepicker";
 import useStyles from './styles';
 import { deleteTask, updateTask } from '../../../../actions/tasks';
@@ -42,8 +38,6 @@ const WeeklyTaskModal = ({task,currentId = 0,show=false, onClose}) => {
     onClose();
   };
 
-  // console.log("task modal task:");
-  // console.log(taskData);
 if(!show) return null
   return (
     <Modal show={show} onHide={onClose}>
