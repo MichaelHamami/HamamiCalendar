@@ -2,13 +2,11 @@ import nodemailer from "nodemailer";
 import smtpTransport from "nodemailer-smtp-transport";
 import Task from "../models/task.js";
 import Agenda from "agenda";
-import dotenv from "dotenv";
 
-dotenv.config();
-
+import {SECRETS} from '../secrets.js'
 
 // var mailOptions = {
-//     // from: process.env.email_server_user,
+//     // from:SECRETS.email_server_user,
 //     to: email,
 //     subject: "User Activation Link",
 //     html: `
@@ -22,19 +20,16 @@ export const transporter = nodemailer.createTransport(
     service: "gmail",
     host: "smtp.gmail.com",
     auth: {
-      user: process.env.email_server_user,
-      pass: process.env.email_password,
+      user:SECRETS.email_server_user,
+      pass:SECRETS.email_app_password,
     },
   })
 );
 
 export const sendEmailRemainder = async (task, email_to) => {
-  console.log(
-    `sendEmailRemainder called with email: ${email_to} and task: ${task}`
-  );
 
   var mailOptions = {
-    from: process.env.email_server_from,
+    from:SECRETS.email_server_user,
     to: email_to,
     subject: "Task Remainder",
     html: `
@@ -46,9 +41,26 @@ export const sendEmailRemainder = async (task, email_to) => {
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error);
       return;
     }
-    console.log("Email sent: " + info.response);
   });
 };
+
+export const checkSendEmail = async (email_to) => {
+
+  var mailOptions = {
+    from:SECRETS.email_server_user,
+    to: email_to,
+    subject: "Task Remainder",
+    html: `
+        <h2> Task Remainder </h2>
+        `,
+  };
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      return;
+    }
+  });
+};
+
+

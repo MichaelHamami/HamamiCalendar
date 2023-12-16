@@ -1,4 +1,6 @@
 import express from "express";
+import auth from "../middleware/auth.js";
+
 const router = express.Router();
 
 import {
@@ -17,7 +19,7 @@ router.post("/signup", signup);
 router.post("/email-activate/:token", activateUser);
 
 router.patch("/changePassword", changePassword);
-router.patch("/editProfile", editProfile);
+router.patch("/editProfile", auth,editProfile);
 
 router.post("/changeEmail", changeEmail);
 router.patch("/confirmEmail/:token", confirmEmail);

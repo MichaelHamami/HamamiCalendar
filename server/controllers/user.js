@@ -1,18 +1,15 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
 import UserModal from "../models/user.js";
-import { transporter } from "../Utils/utils.js";
-import dotenv from "dotenv";
+import { transporter,checkSendEmail } from "../Utils/utils.js";
+import {SECRETS} from '../secrets.js'
 
-dotenv.config();
-const secret = process.env.secret || 'test';
+
+const secret = SECRETS.secret;
 
 export const activateUser = async (req, res) => {
-  console.log("activateUser called in controllers");
   const { token } = req.params;
 
-  console.log("token is:" + token);
   let name_user, email_user, password_user;
   if (token) {
     jwt.verify(token, secret, function (err, decodedToken) {
@@ -25,9 +22,6 @@ export const activateUser = async (req, res) => {
       password_user = password;
     });
     try {
-      console.log(
-        `name: ${name_user} email: ${email_user} password: ${password_user}`
-      );
       const hashedPassword = await bcrypt.hash(password_user, 12);
       const result = await UserModal.create({
         email: email_user,
@@ -47,7 +41,6 @@ export const activateUser = async (req, res) => {
         message: "Email Activated Successfully",
       });
     } catch (error) {
-      console.log(error);
       return res.status(500).json({ message: "Something went wrong" });
     }
   } else {
@@ -56,7 +49,6 @@ export const activateUser = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
-  console.log("signup called in controllers");
 
   const { email, password, firstName, lastName } = req.body;
 
@@ -72,7 +64,7 @@ export const signup = async (req, res) => {
     });
     const url = `http://localhost:3000/activate/${token}`;
     var mailOptions = {
-      from: process.env.email_server,
+      from:SECRETS.email_server_user,
       to: email,
       subject: "User Activation Link",
       html: `
@@ -83,10 +75,8 @@ export const signup = async (req, res) => {
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
         return res.status(500).json({error:"Something went wrong"});
       }
-      console.log("Email sent: " + info.response);
       return res.status(200).json({
         message:
           "Link has been sent to your email please click on it to activate your user",
@@ -97,14 +87,10 @@ export const signup = async (req, res) => {
     res.status(500).json({
       message: "Something went wrong before  the link sended to the email",
     });
-    console.log(error);
   }
 };
 
 export const login = async (req, res) => {
-  console.log("login called in controllers");
-  console.log(req.body);
-
   const { email, password } = req.body;
 
   try {
@@ -126,9 +112,7 @@ export const login = async (req, res) => {
 };
 
 export const changePassword = async (req, res) => {
-  console.log("changePassword called in controllers");
   const { email, oldPassword, newPassword } = req.body;
-  console.log(req.body);
   try {
     const oldUser = await UserModal.findOne({ email });
     if (!oldUser) return res.status(404).json({ error: "User doesn't exist" });
@@ -153,21 +137,25 @@ export const changePassword = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.status(200).json({ result: user, token, message: "password changed" });
+   return res.status(200).json({ result: user, token, message: "password changed" });
   } catch (err) {
-    res.status(500).json({ message: "Something went wrong" });
+   return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 export const editProfile = async (req, res) => {
-  console.log("editProfile called in controllers");
-  const { email, firstName, lastName } = req.body;
+  try {
+    console.log("edit Profile called");
+    const { email, firstName, lastName } = req.body;
+    return res.status(200).json({message:"Profile Changed"});
+  } catch (error) {
+    console.log(error)
+   return res.status(500).json({ message: "Something went wrong" });
+  }
 };
 
 export const changeEmail = async (req, res) => {
-  console.log("changeEmail called in controllers");
   const { oldEmail, newEmail } = req.body;
-  console.log(`called with: oldEmail: ${oldEmail} newEmail: ${newEmail}`);
   const oldUser = await UserModal.findOne({ email: newEmail });
 
   // if (oldUser) return res.status(400).json({ message: "Email already exists" });
@@ -181,7 +169,7 @@ export const changeEmail = async (req, res) => {
   const url = `http://localhost:3000/email_change_activate/${token}`;
 
   var mailOptions = {
-    from: process.env.email_server,
+    from:SECRETS.email_server_user,
     to: newEmail,
     subject: "Email Change Confirm Link",
     html: `
@@ -192,10 +180,8 @@ export const changeEmail = async (req, res) => {
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error);
       return res.json({ error: "Something went wrong" });
     }
-    console.log("Email sent: " + info.response);
     return res.json({
       message:
         "Link has been sent to your email please click on it to confirm your new email",
@@ -205,11 +191,8 @@ export const changeEmail = async (req, res) => {
 };
 
 export const confirmEmail = async (req, res) => {
-  console.log("confirmEmail called in controllers");
   const { token } = req.params;
-  console.log(req);
 
-  console.log("token is:" + token);
   let new_email, old_email;
   if (token) {
     jwt.verify(token, secret, function (err, decodedToken) {
@@ -223,7 +206,6 @@ export const confirmEmail = async (req, res) => {
     });
 
     try {
-      console.log(`email: ${new_email}`);
       const filter = { email: old_email };
       const update = { email: new_email };
       const user = await UserModal.findOneAndUpdate(filter, update, {
@@ -232,7 +214,6 @@ export const confirmEmail = async (req, res) => {
       const newToken = jwt.sign({ email: user.email, id: user._id }, secret, {
         expiresIn: "1h",
       });
-      console.log(user);
       // return res.status(201).json({ result: result, token: newToken });
       // return res.json({ message: "Email changed" });
       return res.json({
@@ -242,7 +223,6 @@ export const confirmEmail = async (req, res) => {
       });
     } catch (error) {
       res.status(500).json({ message: "Something went wrong" });
-      console.log(error);
     }
   } else {
     return res.json({ error: "Something went wrong on token" });

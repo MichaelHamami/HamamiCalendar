@@ -1,15 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
 import taskRoutes from "./routes/task.js";
 import userRouter from "./routes/user.js";
 // import Agenda from "agenda";
+import {SECRETS} from './secrets.js'
 
 const app = express();
-dotenv.config();
 
-// const mongoConnectionString = process.env.CONNECTION_URL;
+// const mongoConnectionString =SECRETS.CONNECTION_URL;
 // const agenda = new Agenda({
 //   db: {
 //     address: mongoConnectionString,
@@ -64,38 +63,11 @@ app.use(
 app.use("/tasks", taskRoutes);
 app.use("/user", userRouter);
 
-
-// agenda.define(
-//   "send email report",
-//   { priority: "high", concurrency: 10 },
-//   async (job) => {
-//     const { to } = job.attrs.data;
-//     console.log(`sended email to: ${to}`);
-//     // await emailClient.send({
-//     //   to,
-//     //   from: "example@example.com",
-//     //   subject: "Email Report",
-//     //   body: "...",
-//     // });
-//   }
-// );
-
-// (async function () {
-//   await agenda.start();
-//   await agenda.schedule("in 2 minutes", "send email report", {
-//     to: "admin@example.com",
-//   });
-// })();
-
-const PORT = process.env.PORT || 5000;
+const PORT = SECRETS.PORT;
 
 mongoose
-  .connect(process.env.CONNECTION_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(SECRETS.CONNECTION_URL)
   .then(() =>
     app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
   )
   .catch((error) => console.log(error));
-mongoose.set("useFindAndModify", false);
